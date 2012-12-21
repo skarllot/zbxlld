@@ -4,6 +4,21 @@ ZBXLLD
 ZBXLLD provides additional discovery features to Zabbix agent.
 
 
+Installation
+============
+
+- Compile or download from http://goo.gl/LBngs.
+
+- Copy "zbxlld-win.exe" to Zabbix agent directory (eg: C:\Zabbix\bin).
+
+- Add the following line to zabbix_agentd.conf:
+UserParameter=zbxlld[*],C:\Zabbix\bin\zbxlld-win.exe $1 $2
+
+- Restart the Zabbix agent if is already started.
+
+- Read https://github.com/skarllot/zbxlld/wiki/Manual for further instructions.
+
+
 How to report bugs
 ==================
 
