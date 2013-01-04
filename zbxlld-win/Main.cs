@@ -21,73 +21,42 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net.NetworkInformation;
 
-namespace zbxlld.windows
+namespace zbxlld.Windows
 {
 	class MainClass
 	{
-		private const string ARG_DRIVE_FIXED = "drive.discovery.fixed";
-		private const string ARG_DRIVE_REMOVABLE = "drive.discovery.removable";
-		private const string ARG_NETWORK = "network.discovery";
+		static IArgHandler[] ARG_HANDLERS = new IArgHandler[] {
+			Discovery.Drive.Default, Discovery.Network.Default, Discovery.Service.Default };
 
-		public static void Main (string[] args)
+		public static void Main(string[] args)
 		{
 			if (args.Length < 1) {
-				Console.WriteLine ("At least one parameter should be provided.");
+				Console.WriteLine("At least one parameter should be provided.");
 				return;
 			}
 
-			JsonOutput jout;
-
-			switch (args [0]) {
-			case ARG_DRIVE_FIXED:
-			case ARG_DRIVE_REMOVABLE:
-				DriveType dtype = DriveType.Fixed;
-				if (args [0] == ARG_DRIVE_REMOVABLE)
-					dtype = DriveType.Removable;
-
-				jout = new JsonOutput ();
-
-				DriveInfo[] drives = DriveInfo.GetDrives ();
-				foreach (DriveInfo d in drives) {
-					if (d.IsReady && d.DriveType == dtype) {
-						Dictionary<string, string> item =
-							new Dictionary<string, string> (2);
-
-						item.Add ("FSNAME", d.Name.Replace ("\\", ""));
-						item.Add ("FSLABEL", d.VolumeLabel);
-						item.Add ("FSFORMAT", d.DriveFormat);
-						jout.Add (item);
-					}
+			Dictionary<string, IArgHandler> hList =
+				new Dictionary<string, IArgHandler>();
+			foreach (IArgHandler i in ARG_HANDLERS) {
+				foreach (string j in i.GetAllowedArgs()) {
+					hList.Add(j, i);
 				}
-
-				Console.Write (jout.ToString ());
-				break;
-			case ARG_NETWORK:
-				jout = new JsonOutput ();
-
-				NetworkInterface[] netifs = NetworkInterface.GetAllNetworkInterfaces ();
-				foreach (NetworkInterface n in netifs) {
-					if (n.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
-						n.NetworkInterfaceType != NetworkInterfaceType.Tunnel) {
-						Dictionary<string, string> item =
-							new Dictionary<string, string> (3);
-
-						item.Add ("IFDESC", n.Description);
-						item.Add ("IFNAME", n.Name);
-						item.Add ("IFADDR", n.GetPhysicalAddress ().ToString ());
-						jout.Add (item);
-					}
-				}
-
-				Console.Write (jout.ToString ());
-				break;
-			default:
-				Console.WriteLine ("Invalid argument");
-				break;
 			}
+
+			IArgHandler val;
+			if (!hList.TryGetValue(args [0], out val)) {
+				Console.WriteLine("Invalid argument");
+				return;
+			}
+
+			Supplement.JsonOutput jout = val.GetOutput(args[0]);
+			if (jout == null) {
+				Console.WriteLine("Invalid argument");
+				return;
+			}
+
+			Console.Write(jout.ToString());
 		}
 	}
 }

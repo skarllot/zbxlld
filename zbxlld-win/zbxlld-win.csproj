@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{43E7116A-1642-4E34-89FA-F20E68A1C9A6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>zbxlld.windows</RootNamespace>
-    <StartupObject>zbxlld.windows.MainClass</StartupObject>
+    <RootNamespace>zbxlld.Windows</RootNamespace>
+    <StartupObject>zbxlld.Windows.MainClass</StartupObject>
     <AssemblyName>zbxlld-win</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
@@ -30,11 +30,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="JsonOutput.cs" />
+    <Compile Include="Discovery\Drive.cs" />
+    <Compile Include="IArgHandler.cs" />
+    <Compile Include="Discovery\Network.cs" />
+    <Compile Include="Discovery\Service.cs" />
+    <Compile Include="Supplement\JsonOutput.cs" />
+    <Compile Include="Supplement\SCManager.cs" />
+    <Compile Include="Supplement\ServiceStartType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Discovery\" />
+    <Folder Include="Supplement\" />
+  </ItemGroup>
 </Project>
