@@ -22,6 +22,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using zbxlld.Windows.Supplement;
 
 namespace zbxlld.Windows.Discovery
 {
@@ -29,6 +30,9 @@ namespace zbxlld.Windows.Discovery
 	{
 		const string ARG_DRIVE_FIXED = "drive.discovery.fixed";
 		const string ARG_DRIVE_REMOVABLE = "drive.discovery.removable";
+		const string ARG_DRIVE_MPOINT = "drive.discovery.mountpoint";
+		const string ARG_DRIVE_SWAP = "drive.discovery.swap";
+		const string ARG_DRIVE_NOSWAP = "drive.discovery.noswap";
 
 		static Drive def = new Drive();
 
@@ -42,6 +46,9 @@ namespace zbxlld.Windows.Discovery
 
 		public Supplement.JsonOutput GetOutput(string arg)
 		{
+			bool swap = false;
+			bool noswap = false;
+
 			DriveType dtype;
 			switch (arg) {
 				case ARG_DRIVE_FIXED:
@@ -50,21 +57,33 @@ namespace zbxlld.Windows.Discovery
 				case ARG_DRIVE_REMOVABLE:
 					dtype = DriveType.Removable;
 					break;
+				case ARG_DRIVE_SWAP:
+					dtype = DriveType.Fixed;
+					swap = true;
+					break;
+				case ARG_DRIVE_NOSWAP:
+					dtype = DriveType.Fixed;
+					noswap = true;
+					break;
 				default:
 					return null;
 			}
 			
 			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
-			
-			DriveInfo[] drives = DriveInfo.GetDrives ();
-			foreach (DriveInfo d in drives) {
-				if (d.IsReady && d.DriveType == dtype) {
+
+			Win32_Volume[] vols = Win32_Volume.GetAllVolumes();
+			foreach (Win32_Volume v in vols) {
+
+				if (v.Automount &&
+				    v.DriveType == dtype &&
+				    (!swap || v.PageFilePresent) &&
+				    (!noswap || !v.PageFilePresent)) {
 					Dictionary<string, string> item =
 						new Dictionary<string, string> (2);
 					
-					item.Add ("FSNAME", d.Name.Replace ("\\", ""));
-					item.Add ("FSLABEL", d.VolumeLabel);
-					item.Add ("FSFORMAT", d.DriveFormat);
+					item.Add ("FSNAME", v.Name.TrimEnd('\\').Replace('\\', '/'));
+					item.Add ("FSLABEL", v.Label);
+					item.Add ("FSFORMAT", v.FileSystem);
 					jout.Add (item);
 				}
 			}
@@ -78,7 +97,13 @@ namespace zbxlld.Windows.Discovery
 
 		string[] IArgHandler.GetAllowedArgs()
 		{
-			return new string[] { ARG_DRIVE_FIXED, ARG_DRIVE_REMOVABLE };
+			return new string[] {
+				ARG_DRIVE_FIXED,
+				ARG_DRIVE_REMOVABLE,
+				ARG_DRIVE_MPOINT,
+				ARG_DRIVE_SWAP,
+				ARG_DRIVE_NOSWAP
+			};
 		}
 
 		#endregion

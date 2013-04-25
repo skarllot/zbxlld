@@ -31,6 +31,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Management" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -42,6 +43,8 @@
     <Compile Include="Supplement\JsonOutput.cs" />
     <Compile Include="Supplement\SCManager.cs" />
     <Compile Include="Supplement\ServiceStartType.cs" />
+    <Compile Include="Supplement\Win32_Volume.cs" />
+    <Compile Include="Supplement\DriveStatus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
