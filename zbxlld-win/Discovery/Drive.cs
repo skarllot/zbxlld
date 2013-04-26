@@ -31,6 +31,7 @@ namespace zbxlld.Windows.Discovery
 		const string ARG_DRIVE_FIXED = "drive.discovery.fixed";
 		const string ARG_DRIVE_REMOVABLE = "drive.discovery.removable";
 		const string ARG_DRIVE_MPOINT = "drive.discovery.mountpoint";
+		const string ARG_DRIVE_NOMPOINT = "drive.discovery.nomountpoint";
 		const string ARG_DRIVE_SWAP = "drive.discovery.swap";
 		const string ARG_DRIVE_NOSWAP = "drive.discovery.noswap";
 
@@ -42,10 +43,16 @@ namespace zbxlld.Windows.Discovery
 			}
 		}
 
+		private Drive()
+		{
+		}
+
 		#region IArgHandler implementation
 
 		public Supplement.JsonOutput GetOutput(string arg)
 		{
+			bool mpoint = false;
+			bool nompoint = false;
 			bool swap = false;
 			bool noswap = false;
 
@@ -56,6 +63,14 @@ namespace zbxlld.Windows.Discovery
 					break;
 				case ARG_DRIVE_REMOVABLE:
 					dtype = DriveType.Removable;
+					break;
+				case ARG_DRIVE_MPOINT:
+					dtype = DriveType.Fixed;
+					mpoint = true;
+					break;
+				case ARG_DRIVE_NOMPOINT:
+					dtype = DriveType.Fixed;
+					nompoint = true;
 					break;
 				case ARG_DRIVE_SWAP:
 					dtype = DriveType.Fixed;
@@ -72,10 +87,14 @@ namespace zbxlld.Windows.Discovery
 			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
 
 			Win32_Volume[] vols = Win32_Volume.GetAllVolumes();
+			bool ismpoint;
 			foreach (Win32_Volume v in vols) {
+				ismpoint = (v.DriveLetter == null);
 
 				if (v.Automount &&
 				    v.DriveType == dtype &&
+				    (!mpoint || ismpoint) &&
+				    (!nompoint || !ismpoint) &&
 				    (!swap || v.PageFilePresent) &&
 				    (!noswap || !v.PageFilePresent)) {
 					Dictionary<string, string> item =
@@ -101,6 +120,7 @@ namespace zbxlld.Windows.Discovery
 				ARG_DRIVE_FIXED,
 				ARG_DRIVE_REMOVABLE,
 				ARG_DRIVE_MPOINT,
+				ARG_DRIVE_NOMPOINT,
 				ARG_DRIVE_SWAP,
 				ARG_DRIVE_NOSWAP
 			};

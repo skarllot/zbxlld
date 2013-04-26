@@ -45,6 +45,7 @@
     <Compile Include="Supplement\ServiceStartType.cs" />
     <Compile Include="Supplement\Win32_Volume.cs" />
     <Compile Include="Supplement\DriveStatus.cs" />
+    <Compile Include="Supplement\DriveAvailability.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -37,9 +37,23 @@ namespace zbxlld.Windows.Supplement
 			this.mgtobj = mgtobj;
 		}
 
+		/// <summary>
+		/// If true, the volume is mounted to the file system automatically when the first I/O is issued. If false, the
+		/// volume is not mounted until explicitly mounted by using the Mount method, or by adding a drive letter or
+		/// mount point.
+		/// </summary>
 		public bool Automount {
 			get {
 				return (bool)mgtobj["Automount"];
+			}
+		}
+
+		/// <summary>
+		/// Describes the availability and status of the device.
+		/// </summary>
+		public DriveAvailability Availability {
+			get {
+				return (DriveAvailability)Enum.ToObject(typeof(DriveAvailability), mgtobj["Availability"] ?? -1);
 			}
 		}
 
@@ -108,6 +122,9 @@ namespace zbxlld.Windows.Supplement
 			}
 		}
 
+		/// <summary>
+		/// The PageFilePresent property indicates whether the volume contains a system memory paging file.
+		/// </summary>
 		public bool PageFilePresent {
 			get {
 				bool ret = false;
@@ -155,16 +172,3 @@ namespace zbxlld.Windows.Supplement
 		}
 	}
 }
-
-
-// foreach( ManagementObject volume in 
-// new ManagementObjectSearcher("Select * from Win32_Volume" ).Get())
-// {
-//	if( volume["FreeSpace"] != null )
-//	{
-//		Console.WriteLine("{0} = {1} out of {2}",
-//		                  volume["Name"],
-//		                  ulong.Parse(volume["FreeSpace"].ToString()).ToString("#,##0"),
-//		                  ulong.Parse(volume["Capacity"].ToString()).ToString("#,##0"));
-//	}
-// }
