@@ -28,12 +28,15 @@ namespace zbxlld.Windows.Discovery
 {
 	public class Drive : IArgHandler
 	{
-		const string ARG_DRIVE_FIXED = "drive.discovery.fixed";
-		const string ARG_DRIVE_REMOVABLE = "drive.discovery.removable";
-		const string ARG_DRIVE_MPOINT = "drive.discovery.mountpoint";
-		const string ARG_DRIVE_NOMPOINT = "drive.discovery.nomountpoint";
-		const string ARG_DRIVE_SWAP = "drive.discovery.swap";
-		const string ARG_DRIVE_NOSWAP = "drive.discovery.noswap";
+		const string ARG_DRIVE = "drive.discovery";
+		const string ARG_DRIVE_FIXED = ARG_DRIVE + ".fixed";
+		const string ARG_DRIVE_REMOVABLE = ARG_DRIVE + ".removable";
+		const string ARG_DRIVE_MOUNTED = ARG_DRIVE + ".mounted";
+		const string ARG_DRIVE_MFOLDER = ARG_DRIVE + ".mountfolder";
+		const string ARG_DRIVE_MLETTER = ARG_DRIVE + ".mountletter";
+		const string ARG_DRIVE_NOMOUNT = ARG_DRIVE + ".nomount";
+		const string ARG_DRIVE_SWAP = ARG_DRIVE + ".swap";
+		const string ARG_DRIVE_NOSWAP = ARG_DRIVE + ".noswap";
 
 		static Drive def = new Drive();
 
@@ -51,8 +54,10 @@ namespace zbxlld.Windows.Discovery
 
 		public Supplement.JsonOutput GetOutput(string arg)
 		{
-			bool mpoint = false;
-			bool nompoint = false;
+			bool mounted = false;
+			bool mfolder = false;
+			bool mletter = false;
+			bool nomount = false;
 			bool swap = false;
 			bool noswap = false;
 
@@ -64,13 +69,21 @@ namespace zbxlld.Windows.Discovery
 				case ARG_DRIVE_REMOVABLE:
 					dtype = DriveType.Removable;
 					break;
-				case ARG_DRIVE_MPOINT:
+				case ARG_DRIVE_MOUNTED:
 					dtype = DriveType.Fixed;
-					mpoint = true;
+					mounted = true;
 					break;
-				case ARG_DRIVE_NOMPOINT:
+				case ARG_DRIVE_MFOLDER:
 					dtype = DriveType.Fixed;
-					nompoint = true;
+					mfolder = true;
+					break;
+				case ARG_DRIVE_MLETTER:
+					dtype = DriveType.Fixed;
+					mletter = true;
+					break;
+				case ARG_DRIVE_NOMOUNT:
+					dtype = DriveType.Fixed;
+					nomount = true;
 					break;
 				case ARG_DRIVE_SWAP:
 					dtype = DriveType.Fixed;
@@ -87,22 +100,26 @@ namespace zbxlld.Windows.Discovery
 			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
 
 			Win32_Volume[] vols = Win32_Volume.GetAllVolumes();
-			bool ismpoint;
+			bool ismounted, ismletter;
 			foreach (Win32_Volume v in vols) {
-				ismpoint = (v.DriveLetter == null);
+				ismounted = v.IsMounted;
+				ismletter = (v.DriveLetter != null);
 
 				if (v.Automount &&
 				    v.DriveType == dtype &&
-				    (!mpoint || ismpoint) &&
-				    (!nompoint || !ismpoint) &&
+				    (!mounted || ismounted) &&
+				    (!mfolder || (ismounted && !ismletter)) &&
+				    (!mletter || (ismounted && ismletter)) &&
+				    (!nomount || !ismounted) &&
 				    (!swap || v.PageFilePresent) &&
 				    (!noswap || !v.PageFilePresent)) {
 					Dictionary<string, string> item =
 						new Dictionary<string, string> (2);
 					
-					item.Add ("FSNAME", v.Name.TrimEnd('\\').Replace('\\', '/'));
+					item.Add ("FSNAME", v.Name);
 					item.Add ("FSLABEL", v.Label);
 					item.Add ("FSFORMAT", v.FileSystem);
+					item.Add ("FSCAPTION", v.ToString());
 					jout.Add (item);
 				}
 			}
@@ -119,8 +136,10 @@ namespace zbxlld.Windows.Discovery
 			return new string[] {
 				ARG_DRIVE_FIXED,
 				ARG_DRIVE_REMOVABLE,
-				ARG_DRIVE_MPOINT,
-				ARG_DRIVE_NOMPOINT,
+				ARG_DRIVE_MOUNTED,
+				ARG_DRIVE_MFOLDER,
+				ARG_DRIVE_MLETTER,
+				ARG_DRIVE_NOMOUNT,
 				ARG_DRIVE_SWAP,
 				ARG_DRIVE_NOSWAP
 			};

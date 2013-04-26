@@ -29,6 +29,7 @@ namespace zbxlld.Windows.Supplement
 	public class Win32_Volume
 	{
 		const string WQL_VOLUME = "Select * from Win32_Volume";
+		const string UNMOUNTED_PREFIX = "\\\\?";
 
 		ManagementObject mgtobj;
 
@@ -103,6 +104,17 @@ namespace zbxlld.Windows.Supplement
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether this volume is mounted.
+		/// </summary>
+		public bool IsMounted {
+			get {
+				return !(
+					DriveLetter == null &&
+					Name.IndexOf(UNMOUNTED_PREFIX, 0) == 0);
+			}
+		}
+
+		/// <summary>
 		/// Volume name of the logical disk. This property is null for volumes without a label. For FAT and FAT32
 		/// systems, the maximum length is 11 characters. For NTFS file systems, the maximum length is 32 characters.
 		/// </summary>
@@ -164,11 +176,13 @@ namespace zbxlld.Windows.Supplement
 		{
 			string label = Label;
 			string name = Name.TrimEnd(Path.DirectorySeparatorChar);
+			if (!IsMounted)
+				name = UNMOUNTED_PREFIX + "\\" + name.Substring(11, 4);
 
 			if (label == null)
 				return name;
 			else
-				return string.Format("{0} ({1})", name, label);
+				return string.Format("{0} ({1})", label, name);
 		}
 	}
 }
