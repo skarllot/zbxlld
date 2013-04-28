@@ -38,18 +38,25 @@ namespace zbxlld.Windows.Supplement
 		{
 			StringBuilder str = new StringBuilder ();
 			str.AppendLine ("{\"data\": [");
-			bool first = true;
+			bool first_l1 = true;
 
 			foreach (Dictionary<string, string> i in list) {
-				if (!first)
+				if (!first_l1)
 					str.AppendLine (",");
-				first = false;
+				first_l1 = false;
 
 				str.AppendLine("\t{");
+				bool first_l2 = true;
 				foreach (KeyValuePair<string, string> j in i) {
-					str.AppendFormat("\t\t\"{{#{0}}}\":\"{1}\",\n", j.Key, j.Value);
+					if (!first_l2)
+						str.AppendLine (",");
+					first_l2 = false;
+
+					str.AppendFormat("\t\t\"{{#{0}}}\":\"{1}\"",
+					                 j.Key,
+					                 j.Value.Replace("\\", "\\\\").Replace("\"", "\\\""));
 				}
-				str.Append("\t}");
+				str.Append("\n\t}");
 			}
 
 			str.AppendLine("\n] }");

@@ -117,7 +117,7 @@ namespace zbxlld.Windows.Discovery
 						new Dictionary<string, string> (2);
 					
 					item.Add ("FSNAME", v.Name);
-					item.Add ("FSLABEL", v.Label);
+					item.Add ("FSLABEL", v.Label ?? "");
 					item.Add ("FSFORMAT", v.FileSystem);
 					item.Add ("FSCAPTION", v.ToString());
 					jout.Add (item);
