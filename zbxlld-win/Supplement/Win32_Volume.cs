@@ -68,6 +68,23 @@ namespace zbxlld.Windows.Supplement
 		}
 
 		/// <summary>
+		/// Unique identifier for the volume on this system.
+		/// </summary>
+		public string DeviceID {
+			get {
+				return (string)mgtobj["DeviceID"];
+			}
+		}
+
+		public Guid DeviceGuid {
+			get {
+				string volid = DeviceID.TrimEnd('\\');
+				int idx = volid.IndexOf('{');
+				return new Guid(volid.Substring(idx));
+			}
+		}
+
+		/// <summary>
 		/// Drive letter assigned to a volume. This property is NULL for volumes without drive letters.
 		/// </summary>
 		public string DriveLetter {
