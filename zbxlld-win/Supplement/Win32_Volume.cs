@@ -194,7 +194,7 @@ namespace zbxlld.Windows.Supplement
 			string label = Label;
 			string name = Name.TrimEnd(Path.DirectorySeparatorChar);
 			if (!IsMounted)
-				name = UNMOUNTED_PREFIX + "\\" + name.Substring(11, 4);
+				name = UNMOUNTED_PREFIX + "\\" + name.Substring(11, 6);
 
 			if (label == null)
 				return name;

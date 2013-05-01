@@ -24,7 +24,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using zbxlld.Windows.Supplement.PerfMon;
 
-namespace zbxlld.Windows.Supplement.Perfmon
+namespace zbxlld.Windows.Supplement.PerfMon
 {
 	public class LogicalDisk
 	{
@@ -63,6 +63,7 @@ namespace zbxlld.Windows.Supplement.Perfmon
 			// ===== PERFORMANCE MONITOR ======
 			PerformanceCounterCategory perfCat = new PerformanceCounterCategory(
 				Localization.GetName(COUNTER_LOGICAL_DISK));
+			// TODO: Find a faster way to get instance names.
 			string[] instances = perfCat.GetInstanceNames();
 			// Free megabytes and Performance Monitor instance name
 			Dictionary<ulong, string> perfFree = new Dictionary<ulong, string>(instances.Length);
@@ -71,24 +72,24 @@ namespace zbxlld.Windows.Supplement.Perfmon
 				if (item == "_Total")
 					continue;
 
-				PerformanceCounter p = new PerformanceCounter(
-					Localization.GetName(COUNTER_LOGICAL_DISK),
-					Localization.GetName(COUNTER_FREE_MB),
-					item);
 				Guid volId = Guid.Empty;
 				if (wmiName.TryGetValue(item, out volId)) {
 					perfMonGuid.Add(volId, item);
 				} else {
+					PerformanceCounter p = new PerformanceCounter(
+						Localization.GetName(COUNTER_LOGICAL_DISK),
+						Localization.GetName(COUNTER_FREE_MB),
+						item);
 					perfFree.Add((ulong)p.RawValue, item);
+					p.Close();
+					p.Dispose();
 				}
-				p.Close();
-				p.Dispose();
 			}
 
 			ulong[] warray = new ulong[wmiFree.Count];
 			ulong[] pmarray = new ulong[perfFree.Count];
 			if (warray.Length != pmarray.Length)
-				throw new NotSupportedException();
+				throw new NotSupportedException(MSG_EXCEPTION);
 			wmiFree.Keys.CopyTo(warray, 0);
 			perfFree.Keys.CopyTo(pmarray, 0);
 			Array.Sort<ulong>(warray);

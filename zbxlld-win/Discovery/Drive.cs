@@ -22,8 +22,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using zbxlld.Windows.Supplement;
-using zbxlld.Windows.Supplement.Perfmon;
+using zbxlld.Windows;
 
 namespace zbxlld.Windows.Discovery
 {
@@ -100,9 +99,9 @@ namespace zbxlld.Windows.Discovery
 			
 			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
 
-			Win32_Volume[] vols = Win32_Volume.GetAllVolumes();
+			Supplement.Win32_Volume[] vols = Supplement.Win32_Volume.GetAllVolumes();
 			bool ismounted, ismletter;
-			foreach (Win32_Volume v in vols) {
+			foreach (Supplement.Win32_Volume v in vols) {
 				ismounted = v.IsMounted;
 				ismletter = (v.DriveLetter != null);
 
@@ -118,7 +117,7 @@ namespace zbxlld.Windows.Discovery
 						new Dictionary<string, string> (2);
 					
 					item.Add ("FSNAME", v.Name);
-					item.Add ("FSINSTNAME", LogicalDisk.GetInstanceName(v.DeviceGuid));
+					item.Add ("FSPERFMON", Supplement.PerfMon.LogicalDisk.GetInstanceName(v.DeviceGuid));
 					item.Add ("FSLABEL", v.Label ?? "");
 					item.Add ("FSFORMAT", v.FileSystem);
 					item.Add ("FSCAPTION", v.ToString());

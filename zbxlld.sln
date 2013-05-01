@@ -177,6 +177,7 @@ Global
 		$31.inheritsSet = VisualStudio
 		$31.inheritsScope = text/plain
 		$31.scope = text/plain
+		description = Refer to https://github.com/skarllot/zbxlld
 		version = 0.5.0
 	EndGlobalSection
 EndGlobal
