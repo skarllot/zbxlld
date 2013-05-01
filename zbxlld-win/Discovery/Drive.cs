@@ -23,6 +23,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using zbxlld.Windows.Supplement;
+using zbxlld.Windows.Supplement.Perfmon;
 
 namespace zbxlld.Windows.Discovery
 {
@@ -117,6 +118,7 @@ namespace zbxlld.Windows.Discovery
 						new Dictionary<string, string> (2);
 					
 					item.Add ("FSNAME", v.Name);
+					item.Add ("FSINSTNAME", LogicalDisk.GetInstanceName(v.DeviceGuid));
 					item.Add ("FSLABEL", v.Label ?? "");
 					item.Add ("FSFORMAT", v.FileSystem);
 					item.Add ("FSCAPTION", v.ToString());
