@@ -20,8 +20,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using zbxlld.Windows;
 
 namespace zbxlld.Windows.Discovery
@@ -99,9 +99,16 @@ namespace zbxlld.Windows.Discovery
 			
 			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
 
-			Supplement.Win32_Volume[] vols = Supplement.Win32_Volume.GetAllVolumes();
+			Supplement.IVolumeInfo[] vols = null;
+			try {
+				vols = Supplement.Win32_Volume.GetAllVolumes();
+			} catch {
+				// Fallback to native method
+				vols = Supplement.NativeVolume.GetVolumes();
+			}
+
 			bool ismounted, ismletter;
-			foreach (Supplement.Win32_Volume v in vols) {
+			foreach (Supplement.IVolumeInfo v in vols) {
 				ismounted = v.IsMounted;
 				ismletter = (v.DriveLetter != null);
 
@@ -115,12 +122,19 @@ namespace zbxlld.Windows.Discovery
 				    (!noswap || !v.PageFilePresent)) {
 					Dictionary<string, string> item =
 						new Dictionary<string, string> (2);
-					
+
+					string pmInstName = string.Empty;
+					if (ismounted) {
+						pmInstName = v.Name.TrimEnd('\\');
+					} else {
+						pmInstName = Supplement.PerfMon.LogicalDisk.GetInstanceName(v.VolumeGuid);
+					}
+
 					item.Add ("FSNAME", v.Name);
-					item.Add ("FSPERFMON", Supplement.PerfMon.LogicalDisk.GetInstanceName(v.DeviceGuid));
+					item.Add ("FSPERFMON", pmInstName);
 					item.Add ("FSLABEL", v.Label ?? "");
-					item.Add ("FSFORMAT", v.FileSystem);
-					item.Add ("FSCAPTION", v.ToString());
+					item.Add ("FSFORMAT", v.VolumeFormat);
+					item.Add ("FSCAPTION", v.Caption);
 					jout.Add (item);
 				}
 			}

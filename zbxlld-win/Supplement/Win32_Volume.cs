@@ -26,7 +26,7 @@ using System.IO;
 
 namespace zbxlld.Windows.Supplement
 {
-	public class Win32_Volume
+	public class Win32_Volume : IVolumeInfo
 	{
 		const string WQL_VOLUME = "Select * from Win32_Volume";
 		const string UNMOUNTED_PREFIX = "\\\\?";
@@ -201,5 +201,27 @@ namespace zbxlld.Windows.Supplement
 			else
 				return string.Format("{0} ({1})", label, name);
 		}
+
+		#region IVolumeInfo implementation
+
+		string IVolumeInfo.Caption {
+			get {
+				return ToString();
+			}
+		}
+
+		string IVolumeInfo.VolumeFormat {
+			get {
+				return FileSystem;
+			}
+		}
+
+		Guid IVolumeInfo.VolumeGuid {
+			get {
+				return DeviceGuid;
+			}
+		}
+
+		#endregion
 	}
 }
