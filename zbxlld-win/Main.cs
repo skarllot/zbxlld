@@ -31,10 +31,17 @@ namespace zbxlld.Windows
 
 		public static void Main(string[] args)
 		{
+			string key, keySuffix = null;
+
 			if (args.Length < 1) {
 				Console.WriteLine("At least one parameter should be provided.");
 				return;
+			} else if (args.Length > 1) {
+				if (args [1] != "NULL")
+					keySuffix = args [1];
 			}
+
+			key = args [0];
 
 			Dictionary<string, IArgHandler> hList =
 				new Dictionary<string, IArgHandler>();
@@ -50,7 +57,7 @@ namespace zbxlld.Windows
 				return;
 			}
 
-			Supplement.JsonOutput jout = val.GetOutput(args[0]);
+			Supplement.JsonOutput jout = val.GetOutput(key, keySuffix);
 			if (jout == null) {
 				Console.WriteLine("Invalid argument");
 				return;

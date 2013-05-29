@@ -26,7 +26,7 @@ namespace zbxlld.Windows
 	public interface IArgHandler
 	{
 		string[] GetAllowedArgs();
-		Supplement.JsonOutput GetOutput(string arg);
+		Supplement.JsonOutput GetOutput(string key, string suffix);
 	}
 }
 

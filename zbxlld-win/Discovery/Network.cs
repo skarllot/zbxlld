@@ -39,12 +39,12 @@ namespace zbxlld.Windows.Discovery
 
 		#region IArgHandler implementation
 
-		public Supplement.JsonOutput GetOutput(string arg)
+		public Supplement.JsonOutput GetOutput(string arg, string suffix)
 		{
 			if (arg != ARG_NETWORK)
 				return null;
 
-			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
+			Supplement.JsonOutput jout = new Supplement.JsonOutput (suffix);
 			
 			NetworkInterface[] netifs = NetworkInterface.GetAllNetworkInterfaces ();
 			foreach (NetworkInterface n in netifs) {

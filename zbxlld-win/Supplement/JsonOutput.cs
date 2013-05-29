@@ -28,10 +28,12 @@ namespace zbxlld.Windows.Supplement
 	public class JsonOutput : IList<Dictionary<string, string>>
 	{
 		private List<Dictionary<string,string>> list;
+		private string keySuffix;
 
-		public JsonOutput ()
+		public JsonOutput (string keySuffix)
 		{
 			list = new List<Dictionary<string, string>>();
+			this.keySuffix = keySuffix ?? "";
 		}
 
 		public override string ToString ()
@@ -53,7 +55,7 @@ namespace zbxlld.Windows.Supplement
 					first_l2 = false;
 
 					str.AppendFormat("\t\t\"{{#{0}}}\":\"{1}\"",
-					                 j.Key,
+					                 j.Key + keySuffix,
 					                 j.Value.Replace("\\", "\\\\").Replace("\"", "\\\""));
 				}
 				str.Append("\n\t}");

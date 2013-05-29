@@ -52,7 +52,7 @@ namespace zbxlld.Windows.Discovery
 
 		#region IArgHandler implementation
 
-		public Supplement.JsonOutput GetOutput(string arg)
+		public Supplement.JsonOutput GetOutput(string key, string suffix)
 		{
 			bool mounted = false;
 			bool mfolder = false;
@@ -62,7 +62,7 @@ namespace zbxlld.Windows.Discovery
 			bool noswap = false;
 
 			DriveType dtype;
-			switch (arg) {
+			switch (key) {
 				case ARG_DRIVE_FIXED:
 					dtype = DriveType.Fixed;
 					break;
@@ -97,7 +97,7 @@ namespace zbxlld.Windows.Discovery
 					return null;
 			}
 			
-			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
+			Supplement.JsonOutput jout = new Supplement.JsonOutput (suffix);
 
 			Supplement.IVolumeInfo[] vols = null;
 			try {
