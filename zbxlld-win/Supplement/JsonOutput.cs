@@ -28,15 +28,13 @@ namespace zbxlld.Windows.Supplement
 	public class JsonOutput : IList<Dictionary<string, string>>
 	{
 		private List<Dictionary<string,string>> list;
-		private string keySuffix;
 
-		public JsonOutput (string keySuffix)
+		public JsonOutput ()
 		{
 			list = new List<Dictionary<string, string>>();
-			this.keySuffix = keySuffix ?? "";
 		}
 
-		public override string ToString ()
+		public string GetOutput (string keySuffix)
 		{
 			StringBuilder str = new StringBuilder ();
 			str.AppendLine ("{\"data\": [");

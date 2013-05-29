@@ -57,13 +57,13 @@ namespace zbxlld.Windows
 				return;
 			}
 
-			Supplement.JsonOutput jout = val.GetOutput(key, keySuffix);
+			Supplement.JsonOutput jout = val.GetOutput(key);
 			if (jout == null) {
 				Console.WriteLine("Invalid argument");
 				return;
 			}
 
-			Console.Write(jout.ToString());
+			Console.Write(jout.GetOutput(keySuffix));
 		}
 	}
 }

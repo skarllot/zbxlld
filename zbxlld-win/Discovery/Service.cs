@@ -44,7 +44,7 @@ namespace zbxlld.Windows.Discovery
 
 		#region IArgHandler implementation
 
-		public Supplement.JsonOutput GetOutput(string arg, string suffix)
+		public Supplement.JsonOutput GetOutput(string arg)
 		{
 			Supplement.ServiceStartType filter;
 			switch (arg) {
@@ -67,7 +67,7 @@ namespace zbxlld.Windows.Discovery
 					return null;
 			}
 
-			Supplement.JsonOutput jout = new Supplement.JsonOutput(suffix);
+			Supplement.JsonOutput jout = new Supplement.JsonOutput();
 			
 			foreach (ServiceController sc in ServiceController.GetServices()) {
 				Supplement.SCManager scm = new Supplement.SCManager(sc.ServiceName);

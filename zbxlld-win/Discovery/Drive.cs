@@ -52,7 +52,7 @@ namespace zbxlld.Windows.Discovery
 
 		#region IArgHandler implementation
 
-		public Supplement.JsonOutput GetOutput(string key, string suffix)
+		public Supplement.JsonOutput GetOutput(string key)
 		{
 			bool mounted = false;
 			bool mfolder = false;
@@ -97,7 +97,7 @@ namespace zbxlld.Windows.Discovery
 					return null;
 			}
 			
-			Supplement.JsonOutput jout = new Supplement.JsonOutput (suffix);
+			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
 
 			Supplement.IVolumeInfo[] vols = null;
 			try {
