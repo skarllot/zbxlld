@@ -7,12 +7,12 @@ ZBXLLD provides additional discovery features to Zabbix agent.
 Installation
 ============
 
-- Compile or download from http://goo.gl/LBngs.
+- Compile or download from http://bit.ly/15apoVM.
 
 - Copy "zbxlld-win.exe" to Zabbix agent directory (eg: C:\Zabbix\bin).
 
 - Add the following line to zabbix_agentd.conf:  
-UserParameter=zbxlld[*],C:\Zabbix\bin\zbxlld-win.exe $1 $2
+UserParameter=zbxlld[*],C:\Zabbix\bin\zbxlld-win.exe $1 $2 $3
 
 - Restart the Zabbix agent if is already started.
 
