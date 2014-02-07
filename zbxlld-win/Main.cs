@@ -4,7 +4,7 @@
 //  Author:
 //       Fabricio Godoy <skarllot@gmail.com>
 //
-//  Copyright (c) 2012 Fabricio Godoy
+//  Copyright (c) 2014 Fabricio Godoy
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,15 @@ namespace zbxlld.Windows
 {
 	class MainClass
 	{
+        public const string PROGRAM_NAME = "zbxlld-win";
+        // Latest release: 0.6.0.20
+        // Major.Minor.Maintenance.Build
+        public const string PROGRAM_VERSION = "0.6.1.21";
+        public const string PROGRAM_VERSION_SIMPLE = "0.6.1";
+        public const string PROGRAM_TITLE = PROGRAM_NAME + " " + PROGRAM_VERSION_SIMPLE;
+
+        public static readonly bool DEBUG = System.Diagnostics.Debugger.IsAttached;
+
 		static IArgHandler[] ARG_HANDLERS = new IArgHandler[] {
 			Discovery.Drive.Default, Discovery.Network.Default, Discovery.Service.Default };
 

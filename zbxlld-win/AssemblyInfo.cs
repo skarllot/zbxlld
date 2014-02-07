@@ -4,7 +4,7 @@
 //  Author:
 //       Fabricio Godoy <skarllot@gmail.com>
 //
-//  Copyright (c) 2012 Fabricio Godoy
+//  Copyright (c) 2014 Fabricio Godoy
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,17 +20,17 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using zbxlld.Windows;
 
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("zbxlld-win")]
+[assembly: AssemblyTitle(MainClass.PROGRAM_TITLE)]
 [assembly: AssemblyDescription("Refer to https://github.com/skarllot/zbxlld")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("zbxlld-win")]
-[assembly: AssemblyCopyright("2013 (c) Fabricio Godoy")]
+[assembly: AssemblyProduct(MainClass.PROGRAM_NAME + ".exe")]
+[assembly: AssemblyCopyright("2014 (c) Fabricio Godoy")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -38,7 +38,8 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("0.6.0.*")]
+[assembly: AssemblyVersion(MainClass.PROGRAM_VERSION)]
+[assembly: AssemblyFileVersion(MainClass.PROGRAM_VERSION)]
 
 // The following attributes are used to specify the signing key for the assembly, 
 // if desired. See the Mono documentation for more information about signing.
