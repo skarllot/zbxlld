@@ -4,7 +4,7 @@
 //  Author:
 //       Fabricio Godoy <skarllot@gmail.com>
 //
-//  Copyright (c) 2013 Fabricio Godoy
+//  Copyright (c) 2014 Fabricio Godoy
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -52,6 +52,10 @@ namespace zbxlld.Windows.Supplement.PerfMon
 				    string.IsNullOrEmpty(strCounter[i+1])) {
 				    continue;
 				}
+                // Workaround to avoid duplicated keys.
+                if (counterList.ContainsKey(strCounter[i]))
+                    continue;
+
 				counterList.Add(strCounter[i], strCounter[i+1]);
 			}
 		}
