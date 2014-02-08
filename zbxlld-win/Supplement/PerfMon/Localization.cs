@@ -27,38 +27,55 @@ namespace zbxlld.Windows.Supplement.PerfMon
 {
 	public class Localization
 	{
+        const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.PerfMon.Localization";
 		const string KEY_PERFLIB_CURLANG = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\CurrentLanguage";
 		const string KEY_PERFLIB_DEFAULT = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\009";
 		static Dictionary<string, string> counterList;
 
-		static Localization()
-		{
-			RegistryKey regKey;
+        static Localization()
+        {
+            RegistryKey regKey;
 
-			// TODO: Heavy test both keys
-			/*try {
-				//regKey = Registry.LocalMachine.OpenSubKey(KEY_PERFLIB_CURLANG);
-			} catch (Exception) {
-				regKey = Registry.LocalMachine.OpenSubKey(KEY_PERFLIB_DEFAULT);
-			}*/
-			regKey = Registry.LocalMachine.OpenSubKey(KEY_PERFLIB_DEFAULT);
+            // TODO: Heavy test both keys
+            /*try {
+                //regKey = Registry.LocalMachine.OpenSubKey(KEY_PERFLIB_CURLANG);
+            } catch (Exception) {
+                regKey = Registry.LocalMachine.OpenSubKey(KEY_PERFLIB_DEFAULT);
+            }*/
+            regKey = Registry.LocalMachine.OpenSubKey(KEY_PERFLIB_DEFAULT);
 
-			string[] strCounter = regKey.GetValue("Counter") as string[];
-			regKey.Close();
+            string[] strCounter = regKey.GetValue("Counter") as string[];
+            regKey.Close();
 
-			counterList = new Dictionary<string, string>(strCounter.Length / 2);
-			for (int i = 0; i < strCounter.Length; i += 2) {
-				if (string.IsNullOrEmpty(strCounter[i]) ||
-				    string.IsNullOrEmpty(strCounter[i+1])) {
-				    continue;
-				}
+            counterList = new Dictionary<string, string>(strCounter.Length / 2);
+            for (int i = 0; i < strCounter.Length; i += 2)
+            {
+                if (string.IsNullOrEmpty(strCounter[i]) ||
+                    string.IsNullOrEmpty(strCounter[i + 1]))
+                {
+                    continue;
+                }
                 // Workaround to avoid duplicated keys.
                 if (counterList.ContainsKey(strCounter[i]))
+                {
+                    if (MainClass.DEBUG)
+                    {
+                        MainClass.WriteLogEntry(string.Format("{0}..cctor: duplicated key. " +
+                            "Existing: \"{1}\" \"{2}\". New: \"{3}\" \"{4}\".", CLASS_FULL_PATH,
+                                strCounter[i], counterList[strCounter[i]], strCounter[i], strCounter[i + 1]));
+                    }
                     continue;
+                }
 
-				counterList.Add(strCounter[i], strCounter[i+1]);
-			}
-		}
+                counterList.Add(strCounter[i], strCounter[i + 1]);
+            }
+
+            if (MainClass.DEBUG)
+            {
+                MainClass.WriteLogEntry(string.Format("{0}..cctor: ending. " +
+                    "counterList.Count: {1}", CLASS_FULL_PATH, counterList.Count));
+            }
+        }
 
 		public static string GetName(string id) {
 			return counterList[id];

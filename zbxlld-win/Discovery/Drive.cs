@@ -4,7 +4,7 @@
 //  Author:
 //       Fabricio Godoy <skarllot@gmail.com>
 //
-//  Copyright (c) 2013 Fabricio Godoy
+//  Copyright (c) 2014 Fabricio Godoy
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ namespace zbxlld.Windows.Discovery
 		const string ARG_DRIVE_NOMOUNT = ARG_DRIVE + ".nomount";
 		const string ARG_DRIVE_SWAP = ARG_DRIVE + ".swap";
 		const string ARG_DRIVE_NOSWAP = ARG_DRIVE + ".noswap";
+        const string CLASS_FULL_PATH = "zbxlld.Windows.Discovery.Drive";
 
 		static Drive def = new Drive();
 
@@ -104,8 +105,29 @@ namespace zbxlld.Windows.Discovery
 				vols = Supplement.Win32_Volume.GetAllVolumes();
 			} catch {
 				// Fallback to native method
+                if (MainClass.DEBUG)
+                {
+                    MainClass.WriteLogEntry(string.Format(
+                        "{0}.GetOutput: Fallback to native method.", CLASS_FULL_PATH));
+                }
 				vols = Supplement.NativeVolume.GetVolumes();
 			}
+            if (MainClass.DEBUG)
+            {
+                MainClass.WriteLogEntry(string.Format("{0}.GetOutput: got volumes. " +
+                    "vols.Length: {1}", CLASS_FULL_PATH, vols.Length));
+                for (int i = 0; i < vols.Length; i++)
+                {
+                    MainClass.WriteLogEntry(string.Format("{0}.GetOutput: vol[{1}] {{ " +
+                        "Automount={2}, Caption={3}, DriveLetter={4}, DriveType={5}, " +
+                        "IsMounted={6}, Label={7}, Name={8}, PageFilePresent={9}, " +
+                        "VolumeFormat={10}, VolumeGuid={11} }}.", CLASS_FULL_PATH, i,
+                        vols[i].Automount.ToString(), vols[i].Caption, vols[i].DriveLetter,
+                        vols[i].DriveType.ToString(), vols[i].IsMounted.ToString(),
+                        vols[i].Label, vols[i].Name, vols[i].PageFilePresent.ToString(),
+                        vols[i].VolumeFormat, vols[i].VolumeGuid.ToString()));
+                }
+            }
 
 			bool ismounted, ismletter;
 			foreach (Supplement.IVolumeInfo v in vols) {

@@ -25,15 +25,27 @@ using System.Collections.Generic;
 namespace zbxlld.Windows
 {
 	class MainClass
-	{
-        public const string PROGRAM_NAME = "zbxlld-win";
-        // Latest release: 0.6.0.20
-        // Major.Minor.Maintenance.Build
-        public const string PROGRAM_VERSION = "0.6.1.22";
-        public const string PROGRAM_VERSION_SIMPLE = "0.6.1";
-        public const string PROGRAM_TITLE = PROGRAM_NAME + " " + PROGRAM_VERSION_SIMPLE;
+    {
+#if DEBUG
+        public const bool DEBUG = true;
+        private const string PROGRAM_TITLE_SUFFIX = " DEBUG";
+        private static readonly string DEBUG_FILE =
+            System.IO.Path.GetDirectoryName(
+            System.Reflection.Assembly.GetExecutingAssembly().Location) +
+            "\\zbxlld-win-DEBUG.log";
+#else
+        public const bool DEBUG = false;
+        private const string PROGRAM_TITLE_SUFFIX = "";
+        private static readonly string DEBUG_FILE = null;
+#endif
 
-        public static readonly bool DEBUG = System.Diagnostics.Debugger.IsAttached;
+        public const string PROGRAM_NAME = "zbxlld-win";
+        // Latest release: 0.6.1.22
+        // Major.Minor.Maintenance.Build
+        public const string PROGRAM_VERSION = "0.6.2.23";
+        public const string PROGRAM_VERSION_SIMPLE = "0.6.1";
+        public const string PROGRAM_TITLE = PROGRAM_NAME + " " + PROGRAM_VERSION_SIMPLE + PROGRAM_TITLE_SUFFIX;
+        static Logger log = null;
 
 		static IArgHandler[] ARG_HANDLERS = new IArgHandler[] {
 			Discovery.Drive.Default, Discovery.Network.Default, Discovery.Service.Default };
@@ -41,9 +53,19 @@ namespace zbxlld.Windows
 		public static void Main(string[] args)
 		{
 			string key, keySuffix = null;
+            if (DEBUG)
+            {
+                log = new Logger(MainClass.DEBUG_FILE);
+                log.WriteHeader(PROGRAM_NAME, PROGRAM_VERSION);
+            }
 
 			if (args.Length < 1) {
 				Console.WriteLine("At least one parameter should be provided.");
+                if (DEBUG)
+                {
+                    log.WriteFooter();
+                    log.Dispose();
+                }
 				return;
 			} else if (args.Length > 1) {
 				if (args [1] != "NULL")
@@ -73,6 +95,16 @@ namespace zbxlld.Windows
 			}
 
 			Console.Write(jout.GetOutput(keySuffix));
+            if (DEBUG)
+            {
+                log.WriteFooter();
+                log.Dispose();
+            }
 		}
+
+        public static void WriteLogEntry(string s)
+        {
+            log.WriteEntry(s);
+        }
 	}
 }
