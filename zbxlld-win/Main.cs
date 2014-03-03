@@ -42,7 +42,7 @@ namespace zbxlld.Windows
         public const string PROGRAM_NAME = "zbxlld-win";
         // Latest release: 0.6.1.22
         // Major.Minor.Maintenance.Build
-        public const string PROGRAM_VERSION = "0.6.2.25";
+        public const string PROGRAM_VERSION = "0.6.2.26";
         public const string PROGRAM_VERSION_SIMPLE = "0.6.2";
         public const string PROGRAM_TITLE = PROGRAM_NAME + " " + PROGRAM_VERSION_SIMPLE + PROGRAM_TITLE_SUFFIX;
         static Logger log = null;

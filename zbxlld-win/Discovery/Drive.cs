@@ -103,12 +103,14 @@ namespace zbxlld.Windows.Discovery
 			Supplement.IVolumeInfo[] vols = null;
 			try {
 				vols = Supplement.Win32_Volume.GetAllVolumes();
-			} catch {
+			} catch (Exception e) {
 				// Fallback to native method
                 if (MainClass.DEBUG)
                 {
                     MainClass.WriteLogEntry(string.Format(
                         "{0}.GetOutput: Fallback to native method.", CLASS_FULL_PATH));
+                    MainClass.WriteLogEntry("Exception:");
+                    MainClass.WriteLogEntry(e.ToString());
                 }
 				vols = Supplement.NativeVolume.GetVolumes();
 			}

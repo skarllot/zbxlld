@@ -28,6 +28,7 @@ namespace zbxlld.Windows.Supplement
 {
 	public class NativeVolume : IVolumeInfo
 	{
+        const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.NativeVolume";
 		const string KEY_MOUNTED_DEVICES = @"HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices";
 		const string KEY_VALUE_PREFIX = @"\DosDevices\";
 		const string KEY_VALUE_GUID_PREFIX = @"\??\Volume";
@@ -114,7 +115,20 @@ namespace zbxlld.Windows.Supplement
 		public Guid VolumeGuid {
 			get {
 				RegistryKey regKey = Registry.LocalMachine.OpenSubKey(KEY_MOUNTED_DEVICES);
-				byte[] header = (byte[])regKey.GetValue(KEY_VALUE_PREFIX + DriveLetter);
+                object keyval;
+                try { keyval = regKey.GetValue(KEY_VALUE_PREFIX + DriveLetter); }
+                catch (Exception e)
+                {
+                    if (MainClass.DEBUG)
+                    {
+                        MainClass.WriteLogEntry(string.Format(
+                        "{0}.get_VolumeGuid: Could not read value from registry key.", CLASS_FULL_PATH));
+                        MainClass.WriteLogEntry("Exception:");
+                        MainClass.WriteLogEntry(e.ToString());
+                    }
+                    return Guid.Empty;
+                }
+				byte[] header = (byte[])keyval;
 				string[] values = regKey.GetValueNames();
 				byte[] temp;
 				foreach (string item in values) {
