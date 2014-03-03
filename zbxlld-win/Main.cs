@@ -42,7 +42,7 @@ namespace zbxlld.Windows
         public const string PROGRAM_NAME = "zbxlld-win";
         // Latest release: 0.6.1.22
         // Major.Minor.Maintenance.Build
-        public const string PROGRAM_VERSION = "0.6.2.26";
+        public const string PROGRAM_VERSION = "0.6.2.27";
         public const string PROGRAM_VERSION_SIMPLE = "0.6.2";
         public const string PROGRAM_TITLE = PROGRAM_NAME + " " + PROGRAM_VERSION_SIMPLE + PROGRAM_TITLE_SUFFIX;
         static Logger log = null;
@@ -50,7 +50,7 @@ namespace zbxlld.Windows
 		static IArgHandler[] ARG_HANDLERS = new IArgHandler[] {
 			Discovery.Drive.Default, Discovery.Network.Default, Discovery.Service.Default };
 
-		public static void Main(string[] args)
+		public static int Main(string[] args)
 		{
 			string key, keySuffix = null;
             if (DEBUG)
@@ -66,7 +66,7 @@ namespace zbxlld.Windows
                     log.WriteFooter();
                     log.Dispose();
                 }
-				return;
+				return 1;
 			} else if (args.Length > 1) {
 				if (args [1] != "NULL")
 					keySuffix = args [1];
@@ -91,13 +91,13 @@ namespace zbxlld.Windows
                 Console.WriteLine("Available keys are:");
                 foreach (string item in hList.Keys)
                     Console.WriteLine(string.Format(" {0}", item));
-				return;
+				return 2;
 			}
 
 			Supplement.JsonOutput jout = val.GetOutput(key);
 			if (jout == null) {
 				Console.WriteLine("Error getting requested key");
-				return;
+				return 3;
 			}
 
 			Console.Write(jout.GetOutput(keySuffix));
@@ -106,6 +106,8 @@ namespace zbxlld.Windows
                 log.WriteFooter();
                 log.Dispose();
             }
+
+            return 0;
 		}
 
         public static void WriteLogEntry(string s)
