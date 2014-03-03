@@ -28,14 +28,17 @@ namespace zbxlld.Windows.Supplement
 {
 	public class Win32_Volume : IVolumeInfo
 	{
+        const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.Win32_Volume";
 		const string WQL_VOLUME = "Select * from Win32_Volume";
 		const string UNMOUNTED_PREFIX = "\\\\?";
 
-		ManagementObject mgtobj;
+        Dictionary<string, object> properties;
 
 		private Win32_Volume(ManagementObject mgtobj)
 		{
-			this.mgtobj = mgtobj;
+            properties = new Dictionary<string, object>(mgtobj.Properties.Count);
+            foreach (PropertyData item in mgtobj.Properties)
+                properties.Add(item.Name, item.Value);
 		}
 
 		/// <summary>
@@ -45,7 +48,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public bool Automount {
 			get {
-				return (bool)mgtobj["Automount"];
+                object val;
+                if (!properties.TryGetValue("Automount", out val))
+                    return false;
+                return (bool)(val ?? false);
 			}
 		}
 
@@ -54,7 +60,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public DriveAvailability Availability {
 			get {
-				return (DriveAvailability)Enum.ToObject(typeof(DriveAvailability), mgtobj["Availability"] ?? -1);
+                object val;
+                if (!properties.TryGetValue("Availability", out val))
+                    return DriveAvailability.Unknown;
+				return (DriveAvailability)(Enum.ToObject(typeof(DriveAvailability), val ?? DriveAvailability.Unknown));
 			}
 		}
 
@@ -63,7 +72,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public UInt64 Capacity {
 			get {
-				return (UInt64)(mgtobj["Capacity"] ?? -1);
+                object val;
+                if (!properties.TryGetValue("Capacity", out val))
+                    return 0;
+				return (UInt64)(val ?? 0);
 			}
 		}
 
@@ -72,12 +84,18 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string DeviceID {
 			get {
-				return (string)mgtobj["DeviceID"];
+                object val;
+                if (!properties.TryGetValue("DeviceID", out val))
+                    return null;
+				return (string)val;
 			}
 		}
 
 		public Guid DeviceGuid {
 			get {
+                if (DeviceID == null)
+                    return Guid.Empty;
+
 				string volid = DeviceID.TrimEnd('\\');
 				int idx = volid.IndexOf('{');
 				return new Guid(volid.Substring(idx));
@@ -89,7 +107,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string DriveLetter {
 			get {
-				return (string)mgtobj["DriveLetter"];
+                object val;
+                if (!properties.TryGetValue("DriveLetter", out val))
+                    return null;
+				return (string)val;
 			}
 		}
 
@@ -98,7 +119,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public DriveType DriveType {
 			get {
-				return (DriveType)Enum.ToObject(typeof(DriveType), mgtobj["DriveType"] ?? -1);
+                object val;
+                if (!properties.TryGetValue("DriveType", out val))
+                    return DriveType.Unknown;
+				return (DriveType)(Enum.ToObject(typeof(DriveType), val ?? System.IO.DriveType.Unknown));
 			}
 		}
 
@@ -107,7 +131,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string FileSystem {
 			get {
-				return (string)mgtobj["FileSystem"];
+                object val;
+                if (!properties.TryGetValue("FileSystem", out val))
+                    return null;
+				return (string)val;
 			}
 		}
 
@@ -116,7 +143,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public UInt64 FreeSpace {
 			get {
-				return (UInt64)(mgtobj["FreeSpace"] ?? -1);
+                object val;
+                if (!properties.TryGetValue("FreeSpace", out val))
+                    return UInt64.MaxValue;
+				return (UInt64)(val ?? UInt64.MaxValue);
 			}
 		}
 
@@ -137,7 +167,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string Label {
 			get {
-				return (string)mgtobj["Label"];
+                object val;
+                if (!properties.TryGetValue("Label", out val))
+                    return null;
+				return (string)val;
 			}
 		}
 
@@ -147,7 +180,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string Name {
 			get {
-				return (string)mgtobj["Name"];
+                object val;
+                if (!properties.TryGetValue("Name", out val))
+                    return null;
+				return (string)val;
 			}
 		}
 
@@ -156,12 +192,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public bool PageFilePresent {
 			get {
-				bool ret = false;
-				try {
-					ret = (bool)mgtobj["PageFilePresent"];
-				}
-				catch { }
-				return ret;
+                object val;
+                if (!properties.TryGetValue("PageFilePresent", out val))
+                    return false;
+                return (bool)(val ?? false);
 			}
 		}
 
@@ -170,7 +204,10 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public DriveStatus StatusInfo {
 			get {
-				return (DriveStatus)(mgtobj["StatusInfo"] ?? DriveStatus.Unknown);
+                object val;
+                if (!properties.TryGetValue("StatusInfo", out val))
+                    return DriveStatus.Unknown;
+				return (DriveStatus)(Enum.ToObject(typeof(DriveStatus), val ?? DriveStatus.Unknown));
 			}
 		}
 
