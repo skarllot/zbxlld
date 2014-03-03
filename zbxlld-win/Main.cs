@@ -42,8 +42,8 @@ namespace zbxlld.Windows
         public const string PROGRAM_NAME = "zbxlld-win";
         // Latest release: 0.6.1.22
         // Major.Minor.Maintenance.Build
-        public const string PROGRAM_VERSION = "0.6.2.23";
-        public const string PROGRAM_VERSION_SIMPLE = "0.6.1";
+        public const string PROGRAM_VERSION = "0.6.2.25";
+        public const string PROGRAM_VERSION_SIMPLE = "0.6.2";
         public const string PROGRAM_TITLE = PROGRAM_NAME + " " + PROGRAM_VERSION_SIMPLE + PROGRAM_TITLE_SUFFIX;
         static Logger log = null;
 
@@ -84,13 +84,19 @@ namespace zbxlld.Windows
 
 			IArgHandler val;
 			if (!hList.TryGetValue(args [0], out val)) {
+                if (DEBUG)
+                    log.WriteEntry(string.Format("Could not found args[0] = {0}", args[0]));
+
 				Console.WriteLine("Invalid argument");
+                Console.WriteLine("Available keys are:");
+                foreach (string item in hList.Keys)
+                    Console.WriteLine(string.Format(" {0}", item));
 				return;
 			}
 
 			Supplement.JsonOutput jout = val.GetOutput(key);
 			if (jout == null) {
-				Console.WriteLine("Invalid argument");
+				Console.WriteLine("Error getting requested key");
 				return;
 			}
 
