@@ -103,6 +103,15 @@ namespace zbxlld.Windows.Discovery
 			Supplement.IVolumeInfo[] vols = null;
 			try {
 				vols = Supplement.Win32_Volume.GetAllVolumes();
+            } catch (System.OutOfMemoryException e) {
+                if (MainClass.DEBUG)
+                {
+                    MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Out of memory exception.", CLASS_FULL_PATH));
+                    MainClass.WriteLogEntry("Exception:");
+                    MainClass.WriteLogEntry(e.ToString());
+                }
+                Console.WriteLine("You have insufficient permissions or insufficient memory.");
+                Environment.Exit((int)ErrorId.GetAllVolumesOutOfMemory);
 			} catch (Exception e) {
 				// Fallback to native method
                 if (MainClass.DEBUG)
@@ -165,10 +174,6 @@ namespace zbxlld.Windows.Discovery
 
 			return jout;
 		}
-
-		#endregion
-
-		#region IArgHandler implementation
 
 		string[] IArgHandler.GetAllowedArgs()
 		{
