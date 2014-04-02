@@ -28,7 +28,7 @@ using zbxlld.Windows;
 [assembly: AssemblyTitle(MainClass.PROGRAM_TITLE)]
 [assembly: AssemblyDescription("Refer to https://github.com/skarllot/zbxlld")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Fabricio Godoy")]
 [assembly: AssemblyProduct(MainClass.PROGRAM_NAME + ".exe")]
 [assembly: AssemblyCopyright("2014 (c) Fabricio Godoy")]
 [assembly: AssemblyTrademark("")]

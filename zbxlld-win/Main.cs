@@ -66,7 +66,7 @@ namespace zbxlld.Windows
                     log.WriteFooter();
                     log.Dispose();
                 }
-				return 1;
+				return (int)ErrorId.ParameterNone;
 			} else if (args.Length > 1) {
 				if (args [1] != "NULL")
 					keySuffix = args [1];
@@ -91,13 +91,13 @@ namespace zbxlld.Windows
                 Console.WriteLine("Available keys are:");
                 foreach (string item in hList.Keys)
                     Console.WriteLine(string.Format(" {0}", item));
-				return 2;
+				return (int)ErrorId.ParameterInvalid;
 			}
 
 			Supplement.JsonOutput jout = val.GetOutput(key);
 			if (jout == null) {
 				Console.WriteLine("Error getting requested key");
-				return 3;
+				return (int)ErrorId.OutputEmpty;
 			}
 
 			Console.Write(jout.GetOutput(keySuffix));
@@ -107,7 +107,7 @@ namespace zbxlld.Windows
                 log.Dispose();
             }
 
-            return 0;
+            return (int)ErrorId.NoError;
 		}
 
         public static void WriteLogEntry(string s)

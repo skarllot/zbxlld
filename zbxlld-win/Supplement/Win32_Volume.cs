@@ -30,7 +30,7 @@ namespace zbxlld.Windows.Supplement
 	{
         const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.Win32_Volume";
 		const string WQL_VOLUME = "Select * from Win32_Volume";
-		const string UNMOUNTED_PREFIX = "\\\\?";
+		const string UNMOUNTED_PREFIX = @"\\?";
 
         Dictionary<string, object> properties;
 
