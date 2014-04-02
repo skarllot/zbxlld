@@ -4,7 +4,7 @@
 //  Author:
 //       Fabricio Godoy <skarllot@gmail.com>
 //
-//  Copyright (c) 2013 Fabricio Godoy
+//  Copyright (c) 2014 Fabricio Godoy
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,9 @@ namespace zbxlld.Windows.Supplement
                 properties.Add(item.Name, item.Value);
 		}
 
-		/// <summary>
+        #region Properties
+
+        /// <summary>
 		/// If true, the volume is mounted to the file system automatically when the first I/O is issued. If false, the
 		/// volume is not mounted until explicitly mounted by using the Mount method, or by adding a drive letter or
 		/// mount point.
@@ -211,7 +213,9 @@ namespace zbxlld.Windows.Supplement
 			}
 		}
 
-		public static Win32_Volume[] GetAllVolumes()
+        #endregion
+
+        public static Win32_Volume[] GetAllVolumes()
 		{
 			ManagementObjectCollection wmicol = 
 				new ManagementObjectSearcher(WQL_VOLUME).Get();

@@ -37,6 +37,7 @@ namespace zbxlld.Windows.Discovery
 		const string ARG_DRIVE_NOMOUNT = ARG_DRIVE + ".nomount";
 		const string ARG_DRIVE_SWAP = ARG_DRIVE + ".swap";
 		const string ARG_DRIVE_NOSWAP = ARG_DRIVE + ".noswap";
+        const string ARG_DRIVE_NETWORK = ARG_DRIVE + ".network";
         const string CLASS_FULL_PATH = "zbxlld.Windows.Discovery.Drive";
 
 		static Drive def = new Drive();
@@ -51,6 +52,42 @@ namespace zbxlld.Windows.Discovery
 		{
 		}
 
+        private bool TryGetVolumesViaWmi(out Supplement.IVolumeInfo[] vols)
+        {
+            vols = null;
+
+            try
+            {
+                vols = Supplement.Win32_Volume.GetAllVolumes();
+            }
+            catch (System.OutOfMemoryException e)
+            {
+                if (MainClass.DEBUG)
+                {
+                    MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Out of memory exception.", CLASS_FULL_PATH));
+                    MainClass.WriteLogEntry("Exception:");
+                    MainClass.WriteLogEntry(e.ToString());
+                }
+                // TODO: Make a proper exit
+                Console.WriteLine("You have insufficient permissions or insufficient memory.");
+                Environment.Exit((int)ErrorId.GetAllVolumesOutOfMemory);
+            }
+            catch (Exception e)
+            {
+                if (MainClass.DEBUG)
+                {
+                    MainClass.WriteLogEntry(string.Format(
+                        "{0}.GetOutput: Unexpected exception.", CLASS_FULL_PATH));
+                    MainClass.WriteLogEntry("Exception:");
+                    MainClass.WriteLogEntry(e.ToString());
+                }
+                vols = null;
+                return false;
+            }
+
+            return true;
+        }
+
 		#region IArgHandler implementation
 
 		public Supplement.JsonOutput GetOutput(string key)
@@ -61,6 +98,7 @@ namespace zbxlld.Windows.Discovery
 			bool nomount = false;
 			bool swap = false;
 			bool noswap = false;
+            bool onlyNative = false;
 
 			DriveType dtype;
 			switch (key) {
@@ -94,6 +132,10 @@ namespace zbxlld.Windows.Discovery
 					dtype = DriveType.Fixed;
 					noswap = true;
 					break;
+                case ARG_DRIVE_NETWORK:
+                    dtype = DriveType.Network;
+                    onlyNative = true;
+                    break;
 				default:
 					return null;
 			}
@@ -101,28 +143,23 @@ namespace zbxlld.Windows.Discovery
 			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
 
 			Supplement.IVolumeInfo[] vols = null;
-			try {
-				vols = Supplement.Win32_Volume.GetAllVolumes();
-            } catch (System.OutOfMemoryException e) {
-                if (MainClass.DEBUG)
+
+            if (onlyNative)
+            {
+                vols = Supplement.NativeVolume.GetVolumes();
+            }
+            else
+            {
+                if (!TryGetVolumesViaWmi(out vols))
                 {
-                    MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Out of memory exception.", CLASS_FULL_PATH));
-                    MainClass.WriteLogEntry("Exception:");
-                    MainClass.WriteLogEntry(e.ToString());
+                    if (MainClass.DEBUG)
+                        MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Fallback to native method.", CLASS_FULL_PATH));
+
+                    // Fallback to native method
+                    vols = Supplement.NativeVolume.GetVolumes();
                 }
-                Console.WriteLine("You have insufficient permissions or insufficient memory.");
-                Environment.Exit((int)ErrorId.GetAllVolumesOutOfMemory);
-			} catch (Exception e) {
-				// Fallback to native method
-                if (MainClass.DEBUG)
-                {
-                    MainClass.WriteLogEntry(string.Format(
-                        "{0}.GetOutput: Fallback to native method.", CLASS_FULL_PATH));
-                    MainClass.WriteLogEntry("Exception:");
-                    MainClass.WriteLogEntry(e.ToString());
-                }
-				vols = Supplement.NativeVolume.GetVolumes();
-			}
+            }
+
             if (MainClass.DEBUG)
             {
                 MainClass.WriteLogEntry(string.Format("{0}.GetOutput: got volumes. " +
@@ -145,14 +182,14 @@ namespace zbxlld.Windows.Discovery
 				ismounted = v.IsMounted;
 				ismletter = (v.DriveLetter != null);
 
-				if (v.Automount &&
-				    v.DriveType == dtype &&
-				    (!mounted || ismounted) &&
-				    (!mfolder || (ismounted && !ismletter)) &&
-				    (!mletter || (ismounted && ismletter)) &&
-				    (!nomount || !ismounted) &&
-				    (!swap || v.PageFilePresent) &&
-				    (!noswap || !v.PageFilePresent)) {
+				if (v.Automount &&                              // Match to drives mounted automatically
+				    v.DriveType == dtype &&                     // Match drive type
+				    (!mounted || ismounted) &&                  // If defined to mounted drives, then match mounted drives
+				    (!mfolder || (ismounted && !ismletter)) &&  // If defined to folder mounted drives, then match mounted and not has letter
+				    (!mletter || (ismounted && ismletter)) &&   // If defined to letter mounted drives, then match mounted and has letter
+				    (!nomount || !ismounted) &&                 // If defined to not mounted drives, then match not mounted drives
+				    (!swap || v.PageFilePresent) &&             // If defined to drives that has page files, then match to drives that has page file
+				    (!noswap || !v.PageFilePresent)) {          // If defined to drives that no page files, then match to drives that has no page file
 					Dictionary<string, string> item =
 						new Dictionary<string, string> (2);
 
@@ -185,7 +222,8 @@ namespace zbxlld.Windows.Discovery
 				ARG_DRIVE_MLETTER,
 				ARG_DRIVE_NOMOUNT,
 				ARG_DRIVE_SWAP,
-				ARG_DRIVE_NOSWAP
+				ARG_DRIVE_NOSWAP,
+                ARG_DRIVE_NETWORK
 			};
 		}
 

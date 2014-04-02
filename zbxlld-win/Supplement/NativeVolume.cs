@@ -4,7 +4,7 @@
 //  Author:
 //       Fabricio Godoy <skarllot@gmail.com>
 //
-//  Copyright (c) 2013 Fabricio Godoy
+//  Copyright (c) 2014 Fabricio Godoy
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ namespace zbxlld.Windows.Supplement
 		const string KEY_VALUE_PREFIX = @"\DosDevices\";
 		const string KEY_VALUE_GUID_PREFIX = @"\??\Volume";
 		DriveInfo dinfo;
+        Guid? volGuid;
 
 		public NativeVolume(DriveInfo dinfo)
 		{
@@ -89,9 +90,13 @@ namespace zbxlld.Windows.Supplement
 		}
 
 		public string Label {
-			get {
-				return dinfo.VolumeLabel;
-			}
+            get
+            {
+                if (dinfo.IsReady)
+                    return dinfo.VolumeLabel;
+                else
+                    return null;
+            }
 		}
 
 		public string Name {
@@ -107,46 +112,77 @@ namespace zbxlld.Windows.Supplement
 		}
 
 		public string VolumeFormat {
-			get {
-				return dinfo.DriveFormat;
-			}
+            get
+            {
+                if (dinfo.IsReady)
+                    return dinfo.DriveFormat;
+                else
+                    return null;
+            }
 		}
 
 		public Guid VolumeGuid {
 			get {
-				RegistryKey regKey = Registry.LocalMachine.OpenSubKey(KEY_MOUNTED_DEVICES);
-                object keyval;
-                try { keyval = regKey.GetValue(KEY_VALUE_PREFIX + DriveLetter); }
-                catch (Exception e)
-                {
-                    if (MainClass.DEBUG)
-                    {
-                        MainClass.WriteLogEntry(string.Format(
-                        "{0}.get_VolumeGuid: Could not read value from registry key.", CLASS_FULL_PATH));
-                        MainClass.WriteLogEntry("Exception:");
-                        MainClass.WriteLogEntry(e.ToString());
-                    }
-                    return Guid.Empty;
-                }
-				byte[] header = (byte[])keyval;
-				string[] values = regKey.GetValueNames();
-				byte[] temp;
-				foreach (string item in values) {
-					if (item.IndexOf(KEY_VALUE_GUID_PREFIX) == 0) {
-						temp = (byte[])regKey.GetValue(item);
-						if (SequenceEqual<byte>(header, temp)) {
-							regKey.Close();
-							return new Guid(item.Substring(item.IndexOf('{')));
-						}
-					}
-				};
-
-				regKey.Close();
-				return Guid.Empty;
+                Guid guid;
+                TryGetVolumeGuid(out guid);
+                return guid;
 			}
 		}
 
 		#endregion
+
+        private bool TryGetVolumeGuid(out Guid volGuid)
+        {
+            volGuid = Guid.Empty;
+
+            if (this.volGuid.HasValue)
+            {
+                if (this.volGuid.Value == Guid.Empty)
+                    return false;
+
+                volGuid = this.volGuid.Value;
+                return true;
+            }
+
+            this.volGuid = Guid.Empty;
+            RegistryKey regKey = Registry.LocalMachine.OpenSubKey(KEY_MOUNTED_DEVICES);
+            if (regKey == null)
+                return false;
+
+            object keyval;
+            try { keyval = regKey.GetValue(KEY_VALUE_PREFIX + DriveLetter); }
+            catch (Exception e)
+            {
+                if (MainClass.DEBUG)
+                {
+                    MainClass.WriteLogEntry(string.Format(
+                    "{0}.get_VolumeGuid: Could not read value from registry key.", CLASS_FULL_PATH));
+                    MainClass.WriteLogEntry("Exception:");
+                    MainClass.WriteLogEntry(e.ToString());
+                }
+                return false;
+            }
+            byte[] header = (byte[])keyval;
+            string[] values = regKey.GetValueNames();
+            byte[] temp;
+            foreach (string item in values)
+            {
+                if (item.IndexOf(KEY_VALUE_GUID_PREFIX) == 0)
+                {
+                    temp = (byte[])regKey.GetValue(item);
+                    if (SequenceEqual<byte>(header, temp))
+                    {
+                        regKey.Close();
+                        volGuid = new Guid(item.Substring(item.IndexOf('{')));
+                        this.volGuid = volGuid;
+                        return true;
+                    }
+                }
+            };
+
+            regKey.Close();
+            return false;
+        }
 
 		private static bool SequenceEqual<T>(T[] a1, T[] a2) where T : IComparable<T>
 		{
