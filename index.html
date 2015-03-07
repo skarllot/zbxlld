@@ -1,84 +1,50 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+<html ng-app="zbxlld">
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css">
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <style>
+            .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+            body { padding-top: 50px; }
+        </style>
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <title>ZBXLLD by skarllot</title>
-  </head>
+        <title>ZBXLLD by skarllot</title>
+    </head>
 
   <body>
-    <header>
-      <div class="inner">
-        <h1>ZBXLLD</h1>
-        <h2>Provides additional discovery features to Zabbix-Agent</h2>
-        <a href="https://github.com/skarllot/zbxlld" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+      <nav class="navbar navbar-default navbar-fixed-top" ng-controller="navbarController">
+          <div class="container">
+              <ul class="nav navbar-nav">
+                  <li ng-class="{ active: isView('/') }"><a href="#/">Home</a></li>
+                  <li class="dropdown" dropdown>
+                      <a class="dropdown-toggle" dropdown-toggle role="button">Download<span class="caret"></span></a>
+                      <ul class="dropdown-menu" role="menu">
+                          <li><a href="https://github.com/skarllot/zbxlld/releases/download/v0.7/zbxlld-win.exe">Windows Binary</a></li>
+                          <li><a href="https://github.com/skarllot/zbxlld/archive/v0.7.zip">Source Code (zip)</a></li>
+                          <li><a href="https://github.com/skarllot/zbxlld/archive/v0.7.tar.gz">Source Code (tar.gz)</a></li>
+                      </ul>
+                  </li>
+                  <li ng-class="{ active: isView('/documentation') }"><a href="#/documentation">Documentation</a></li>
+              </ul>
+          </div>
+      </nav>
+      <div ng-view=""></div>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h3>
-<a id="why-zbxlld" class="anchor" href="#why-zbxlld" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why ZBXLLD?</h3>
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://code.angularjs.org/1.3.9/angular.js"></script>
+      <script src="https://code.angularjs.org/1.3.9/angular-route.js"></script>
+      <script src="javascripts/ui-bootstrap-tpls-0.12.1.min.js"></script>
+      <script src="javascripts/module.js"></script>
+      <script src="javascripts/documentation.js"></script>
 
-<p>Official Zabbix-Agent executable lacks detailed discovery for drives, network and services. ZBXLLD fill that void through user parameters to Zabbix-Agent.</p>
-
-<h3>
-<a id="easy-install" class="anchor" href="#easy-install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Easy Install</h3>
-
-<p>To install ZBXLLD you just need to follow the three steps below:</p>
-
-<ul>
-<li>Download and decompress ZBXLLD executable to any directory</li>
-<li>
-<p>Add the line indicated below to zabbix_agentd.conf:</p>
-
-<pre><code>UserParameter=zbxlld[*],C:\Zabbix\bin\zbxlld-win.exe $1 $2 $3
-</code></pre>
-</li>
-<li>Restart Zabbix-Agent service.</li>
-</ul>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<ul>
-<li>Fabricio Godoy (<a href="https://github.com/skarllot" class="user-mention">@skarllot</a>)</li>
-</ul>
-
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Open an issue on Github for support or contact: <a href="https://github.com/skarllot/zbxlld/issues">https://github.com/skarllot/zbxlld/issues</a></p>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/skarllot/zbxlld/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/skarllot/zbxlld/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/skarllot/zbxlld"></a> is maintained by <a href="https://github.com/skarllot">skarllot</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
-
-  
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </body>
 </html>
