@@ -1,0 +1,5 @@
+[
+    { "Name": "Windows Binary", "Url": "https://github.com/skarllot/zbxlld/releases/download/v0.7/zbxlld-win.exe" },
+    { "Name": "Source Code (zip)", "Url": "https://github.com/skarllot/zbxlld/archive/v0.7.zip" },
+    { "Name": "Source Code (tar.gz)", "Url": "https://github.com/skarllot/zbxlld/archive/v0.7.tar.gz" }
+]

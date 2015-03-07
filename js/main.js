@@ -13,9 +13,3 @@ app.config([ '$routeProvider', function($routeProvider) {
         redirectTo: '/'
     });
 }]);
-
-app.controller('navbarController', [ '$scope', '$location', function($scope, $location) {
-    $scope.isView = function(path) {
-        return path === $location.path();
-    };
-}]);
