@@ -4,6 +4,7 @@ app.controller('navbarController', [ '$scope', '$location', '$http', function($s
     $scope.isView = function(path) {
         return path === $location.path();
     };
+    $scope.navCollapsed = true;
     
     $http.get('data/download.json')
     .success(function(result) {

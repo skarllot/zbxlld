@@ -1,16 +1,17 @@
 <div class="container">
     <div class="page-header">
-        <h1>Documentation</h1>
-        <div class="btn-group" dropdown>
-            <button type="button" class="btn">{{ curVersion.version }}</button>
+        <h1 class="row"><div class="col-xs-10 col-sm-10">Documentation</div>
+        <div class="btn-group col-xs-2 col-sm-2" dropdown>
+            <button type="button" class="btn">{{ getVersion() }}</button>
             <button type="button" class="btn dropdown-toggle" dropdown-toggle>
                 <span class="caret"></span>
                 <span class="sr-only">API Version</span>
             </button>
             <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="v in docsVersion" ng-click="curVersion = v"><a>{{ v.version }}</a></li>
+                <li ng-repeat="v in docsVersion" ng-click="setVersion($index)"><a>{{ v.version }}</a></li>
             </ul>
         </div>
+        </h1>
     </div>
     <p>{{ val1 }}</p>
 </div>
