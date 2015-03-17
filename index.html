@@ -36,7 +36,7 @@
                           <li ng-repeat="d in downloads"><a href="{{ d.Url }}" ng-click="toggleNav()">{{ d.Name }}</a></li>
                       </ul>
                   </li>
-                  <li ng-class="{ active: isView('/documentation') }" ng-click="toggleNav()"><a href="#/documentation">Documentation</a></li>
+                  <li ng-class="{ active: isView('/documentation', true) }" ng-click="toggleNav()"><a href="#/documentation">Documentation</a></li>
               </ul>
               </div>
           </div>

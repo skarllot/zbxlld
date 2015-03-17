@@ -14,7 +14,7 @@ app.config([ '$routeProvider', '$controllerProvider',
         templateUrl: 'view/documentation.html'
     })
     .when('/documentation', {
-        templateUrl: 'view/documentation.html'
+        redirectTo: '/documentation/index'
     })
     .otherwise({
         redirectTo: '/'

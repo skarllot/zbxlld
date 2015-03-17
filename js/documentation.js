@@ -1,4 +1,3 @@
-//app.controller('docController', [ '$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
 app.registerCtrl('docController', [ '$scope', '$http', '$routeParams',
                                    function($scope, $http, $routeParams) {
     $scope.curVersion = 0;
