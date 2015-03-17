@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" ng-controller="docController">
     <div class="page-header">
         <h1 class="row"><div class="col-xs-12 col-sm-10">Documentation</div>
         <div class="btn-group col-sm-2" dropdown>
@@ -13,5 +13,5 @@
         </div>
         </h1>
     </div>
-    <p>{{ val1 }}</p>
+    <div ng-include="subRoute()"></div>
 </div>

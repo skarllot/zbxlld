@@ -1,6 +1,6 @@
-var app = angular.module('zbxlld');
-
-app.controller('docController', [ '$scope', '$http', function($scope, $http) {
+//app.controller('docController', [ '$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+app.registerCtrl('docController', [ '$scope', '$http', '$routeParams',
+                                   function($scope, $http, $routeParams) {
     $scope.curVersion = 0;
     $scope.docsVersion = undefined;
     
@@ -19,5 +19,15 @@ app.controller('docController', [ '$scope', '$http', function($scope, $http) {
     };
     $scope.setVersion = function(index) {
         $scope.curVersion = index
+    };
+    
+    $scope.subRoute = function() {
+        switch ($routeParams.level1) {
+            case 'history':
+                //app.resolveScriptDeps(['js/doc/history.js']);
+                return 'view/doc/history.html';
+            default:
+                return 'view/doc/index.html';
+        };
     };
 }]);
