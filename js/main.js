@@ -4,18 +4,6 @@ app.config([ '$routeProvider', '$controllerProvider',
             function($routeProvider, $controllerProvider) {
     // Lazy loading
     app.registerCtrl = $controllerProvider.register;
-    app.resolveScriptDeps = function(dependencies) {
-        return ['$q', '$rootScope', function($q, $rootScope) {
-            var deferred = $q.defer();
-            $script(dependencies, function() {
-                $rootScope.$apply(function() {
-                    deferred.resolve();
-                });
-            });
-            
-            return deferred.promise;
-        }];
-    };
     // ------------
 
     $routeProvider
@@ -23,12 +11,10 @@ app.config([ '$routeProvider', '$controllerProvider',
         templateUrl: 'view/home.html'
     })
     .when('/documentation/:level1', {
-        templateUrl: 'view/documentation.html',
-        resolve: { deps: app.resolveScriptDeps(['js/documentation.js'])}
+        templateUrl: 'view/documentation.html'
     })
     .when('/documentation', {
-        templateUrl: 'view/documentation.html',
-        resolve: { deps: app.resolveScriptDeps(['js/documentation.js'])}
+        templateUrl: 'view/documentation.html'
     })
     .otherwise({
         redirectTo: '/'
