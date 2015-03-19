@@ -1,5 +1,5 @@
-app.registerCtrl('docController', [ '$scope', '$http', '$routeParams',
-                                   function($scope, $http, $routeParams) {
+app.registerCtrl('docController', [ '$rootScope', '$scope', '$http', '$routeParams',
+                                   function($rootScope, $scope, $http, $routeParams) {
     $scope.curVersion = 0;
     $scope.docsVersion = undefined;
     
@@ -23,7 +23,6 @@ app.registerCtrl('docController', [ '$scope', '$http', '$routeParams',
     $scope.subRoute = function() {
         switch ($routeParams.level1) {
             case 'history':
-                //app.resolveScriptDeps(['js/doc/history.js']);
                 return 'view/doc/history.html';
             default:
                 return 'view/doc/index.html';
