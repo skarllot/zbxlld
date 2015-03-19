@@ -8,16 +8,25 @@ app.config([ '$routeProvider', '$controllerProvider',
 
     $routeProvider
     .when('/', {
+        title: 'Home',
         templateUrl: 'view/home.html'
     })
     .when('/documentation/:level1', {
+        title: 'Documentation',
         templateUrl: 'view/documentation.html'
     })
     .when('/documentation', {
+        title: 'Documentation',
         redirectTo: '/documentation/index'
     })
     .otherwise({
         redirectTo: '/'
+    });
+}]);
+
+app.run(['$location', '$rootScope', function($location, $rootScope) {
+    $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+        $rootScope.title = current.$$route.title;
     });
 }]);
 
