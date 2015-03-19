@@ -1,6 +1,5 @@
-var app = angular.module('zbxlld');
-
-app.controller('navbarController', [ '$scope', '$location', '$http', function($scope, $location, $http) {
+app.controller('navbarController', [ '$scope', '$location', '$http',
+                                    function($scope, $location, $http) {
     $scope.isView = function(path, isPrefix) {
         isPrefix = isPrefix || false;
         if (!isPrefix) {

@@ -1,0 +1,91 @@
+[
+    {
+        "version": "v0.7",
+        "date": "2014-04-02",
+        "download": "http://goo.gl/HvUdRs",
+        "changelist": [
+            "Improved debugging and error handling.",
+            "Added helper message to show when a invalid key is requested.",
+            "Improved drive discovery to detect permission issues.",
+            "Added new filter to drive discovery to get network drives.",
+            "Some fixes and improvements when drive discovery is done with native code.",
+            "Some code improvements." ]
+    },
+
+    {
+        "version": "v0.6.1",
+        "date": "2014-02-07",
+        "download": "http://goo.gl/dxI0ZR",
+        "changelist": [
+            "Fixed exception when tries to read PerfMon duplicated keys (Thanks to aib)." ],
+        "links": [ "https://www.zabbix.com/forum/showpost.php?p=144541&postcount=17" ]
+    },
+
+    {
+        "version": "v0.6",
+        "date": "2013-05-29",
+        "download": "http://goo.gl/CpZhhY",
+        "changelist": [ "New feature offers macro suffix to allow duplicated discovery." ]
+    },
+
+    {
+        "version": "v0.5.1",
+        "date": "2013-05-02",
+        "download": "http://goo.gl/TXyQ3",
+        "changelist": [ "Fixed compatibility to Windows XP." ]
+    },
+
+    {
+        "version": "v0.5",
+        "date": "2013-05-02",
+        "download": "http://goo.gl/SSKN0",
+        "changelist": [
+            "Added {#FSPERFMON} macro that returns Performance Monitor instance name.",
+            "Modified {#FSCAPTION} to return 6 characters from GUID instead of 4." ]
+    },
+
+    {
+        "version": "v0.4",
+        "date": "2013-04-28",
+        "download": "http://goo.gl/r6LW5",
+        "changelist": [
+            "Tidied \"drive.discovery\" filters to meaningful names.",
+            "Now fixed volumes are divided into three categories: folder mounted, letter mounted and unmounted.",
+            "Fixed {#FSNAME} to return full original name, no replaces or trims.",
+            "Added {#FSCAPTION} macro that returns friendly display name.",
+            "Fixed JSON output to not print comma after last item.",
+            "Fixed JSON output to escape all backslashes and double quotation marks.",
+            "Fixed exception to print null volume label." ]
+    },
+
+    {
+        "version": "v0.3",
+        "date": "2013-01-04",
+        "download": "http://goo.gl/uBe45",
+        "changelist": [
+            "Option \"drive.discovery.fixed\" now returns volumes without letters too (folder mounted volumes).",
+            "New option to return folder mounted volumes.",
+            "New option to return volumes with assigned letter.",
+            "New option to return volumes with page file.",
+            "New option to return volumes without page file." ]
+    },
+
+    {
+        "version": "v0.2",
+        "date": "2013-01-04",
+        "download": "http://goo.gl/EzDyw",
+        "changelist": [ "New service discovery feature." ]
+    },
+
+    {
+        "version": "v0.1",
+        "date": "2012-12-21",
+        "download": "http://goo.gl/tZFfS",
+        "changelist": [
+            "Allow multiple discovery to the same key.",
+            "Discovery keys returns only useful data.",
+            "Discovery returns drive label.",
+            "Discovery returns network interface friendly name.",
+            "It's GPL 3." ]
+    }
+]
