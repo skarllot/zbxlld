@@ -1,7 +1,7 @@
 <script src="js/doc/history.js"></script>
 
 <h2>History</h2>
-<div ng-controller="docHistoryController">
+<div ng-controller="docHistoryController" ng-cloak class="ng-cloak">
     <div ng-repeat="h in history">
     <p><strong>{{ h.date }}: {{ h.version }} (<a href="{{ h.download }}">DOWNLOAD</a>)</strong></p>
     <ul>
