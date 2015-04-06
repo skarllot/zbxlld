@@ -1,4 +1,4 @@
-var app = angular.module('zbxlld', [ 'ngRoute', 'ui.bootstrap' ]);
+var app = angular.module('zbxlld', [ 'ngRoute', 'ui.bootstrap', 'angular-md5' ]);
 
 app.config([ '$routeProvider', '$controllerProvider',
             function($routeProvider, $controllerProvider) {
