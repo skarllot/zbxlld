@@ -1,43 +1,23 @@
-//
-//  Drive.cs
-//
-//  Author:
-//       Fabricio Godoy <skarllot@gmail.com>
-//
-//  Copyright (c) 2014 Fabricio Godoy
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace zbxlld.Windows.Discovery
 {
 	public class Drive : IArgHandler
 	{
-		private const string ARG_DRIVE = "drive.discovery";
-		private const string ARG_DRIVE_FIXED = ARG_DRIVE + ".fixed";
-		private const string ARG_DRIVE_REMOVABLE = ARG_DRIVE + ".removable";
-		private const string ARG_DRIVE_MOUNTED = ARG_DRIVE + ".mounted";
-		private const string ARG_DRIVE_MFOLDER = ARG_DRIVE + ".mountfolder";
-		private const string ARG_DRIVE_MLETTER = ARG_DRIVE + ".mountletter";
-		private const string ARG_DRIVE_NOMOUNT = ARG_DRIVE + ".nomount";
-		private const string ARG_DRIVE_SWAP = ARG_DRIVE + ".swap";
-		private const string ARG_DRIVE_NOSWAP = ARG_DRIVE + ".noswap";
-		private const string ARG_DRIVE_NETWORK = ARG_DRIVE + ".network";
-		private const string CLASS_FULL_PATH = "zbxlld.Windows.Discovery.Drive";
+		private const string ArgDrive = "drive.discovery";
+		private const string ArgDriveFixed = ArgDrive + ".fixed";
+		private const string ArgDriveRemovable = ArgDrive + ".removable";
+		private const string ArgDriveMounted = ArgDrive + ".mounted";
+		private const string ArgDriveMfolder = ArgDrive + ".mountfolder";
+		private const string ArgDriveMletter = ArgDrive + ".mountletter";
+		private const string ArgDriveNomount = ArgDrive + ".nomount";
+		private const string ArgDriveSwap = ArgDrive + ".swap";
+		private const string ArgDriveNoswap = ArgDrive + ".noswap";
+		private const string ArgDriveNetwork = ArgDrive + ".network";
+		private const string ClassFullPath = "zbxlld.Windows.Discovery.Drive";
 
 		private static Drive def = new Drive();
 
@@ -51,40 +31,39 @@ namespace zbxlld.Windows.Discovery
 		{
 		}
 
-        private bool TryGetVolumesViaWmi(out Supplement.IVolumeInfo[] vols)
+        private bool TryGetVolumesViaWmi([NotNullWhen(true)] out IReadOnlyList<Supplement.IVolumeInfo>? vols)
         {
             vols = null;
 
             try
             {
-                vols = Supplement.Win32_Volume.GetAllVolumes();
+                vols = Supplement.Win32Volume.GetAllVolumes();
+                return true;
             }
-            catch (System.OutOfMemoryException e)
+            catch (OutOfMemoryException e)
             {
                 if (MainClass.DEBUG)
                 {
-                    MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Out of memory exception.", CLASS_FULL_PATH));
+                    MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Out of memory exception.", ClassFullPath));
                     MainClass.WriteLogEntry("Exception:");
                     MainClass.WriteLogEntry(e.ToString());
                 }
                 // TODO: Make a proper exit
                 Console.WriteLine("You have insufficient permissions or insufficient memory.");
                 Environment.Exit((int)ErrorId.GetAllVolumesOutOfMemory);
+                return false;
             }
             catch (Exception e)
             {
                 if (MainClass.DEBUG)
                 {
                     MainClass.WriteLogEntry(string.Format(
-                        "{0}.GetOutput: Unexpected exception.", CLASS_FULL_PATH));
+                        "{0}.GetOutput: Unexpected exception.", ClassFullPath));
                     MainClass.WriteLogEntry("Exception:");
                     MainClass.WriteLogEntry(e.ToString());
                 }
-                vols = null;
                 return false;
             }
-
-            return true;
         }
 
         public Supplement.JsonOutput GetOutput(string key)
@@ -99,47 +78,47 @@ namespace zbxlld.Windows.Discovery
 
 			DriveType dtype;
 			switch (key) {
-				case ARG_DRIVE_FIXED:
+				case ArgDriveFixed:
 					dtype = DriveType.Fixed;
 					break;
-				case ARG_DRIVE_REMOVABLE:
+				case ArgDriveRemovable:
 					dtype = DriveType.Removable;
 					break;
-				case ARG_DRIVE_MOUNTED:
+				case ArgDriveMounted:
 					dtype = DriveType.Fixed;
 					mounted = true;
 					break;
-				case ARG_DRIVE_MFOLDER:
+				case ArgDriveMfolder:
 					dtype = DriveType.Fixed;
 					mfolder = true;
 					break;
-				case ARG_DRIVE_MLETTER:
+				case ArgDriveMletter:
 					dtype = DriveType.Fixed;
 					mletter = true;
 					break;
-				case ARG_DRIVE_NOMOUNT:
+				case ArgDriveNomount:
 					dtype = DriveType.Fixed;
 					nomount = true;
 					break;
-				case ARG_DRIVE_SWAP:
+				case ArgDriveSwap:
 					dtype = DriveType.Fixed;
 					swap = true;
 					break;
-				case ARG_DRIVE_NOSWAP:
+				case ArgDriveNoswap:
 					dtype = DriveType.Fixed;
 					noswap = true;
 					break;
-                case ARG_DRIVE_NETWORK:
+                case ArgDriveNetwork:
                     dtype = DriveType.Network;
                     onlyNative = true;
                     break;
 				default:
-					return null;
+					return new Supplement.JsonOutput();
 			}
 			
 			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
 
-			Supplement.IVolumeInfo[] vols = null;
+			IReadOnlyList<Supplement.IVolumeInfo>? vols;
 
             if (onlyNative)
             {
@@ -150,7 +129,7 @@ namespace zbxlld.Windows.Discovery
                 if (!TryGetVolumesViaWmi(out vols))
                 {
                     if (MainClass.DEBUG)
-                        MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Fallback to native method.", CLASS_FULL_PATH));
+                        MainClass.WriteLogEntry(string.Format("{0}.GetOutput: Fallback to native method.", ClassFullPath));
 
                     // Fallback to native method
                     vols = Supplement.NativeVolume.GetVolumes();
@@ -160,13 +139,13 @@ namespace zbxlld.Windows.Discovery
             if (MainClass.DEBUG)
             {
                 MainClass.WriteLogEntry(string.Format("{0}.GetOutput: got volumes. " +
-                    "vols.Length: {1}", CLASS_FULL_PATH, vols.Length));
-                for (int i = 0; i < vols.Length; i++)
+                    "vols.Length: {1}", ClassFullPath, vols.Count));
+                for (int i = 0; i < vols.Count; i++)
                 {
                     MainClass.WriteLogEntry(string.Format("{0}.GetOutput: vol[{1}] {{ " +
                         "Automount={2}, Caption={3}, DriveLetter={4}, DriveType={5}, " +
                         "IsMounted={6}, Label={7}, Name={8}, PageFilePresent={9}, " +
-                        "VolumeFormat={10}, VolumeGuid={11} }}.", CLASS_FULL_PATH, i,
+                        "VolumeFormat={10}, VolumeGuid={11} }}.", ClassFullPath, i,
                         vols[i].Automount.ToString(), vols[i].Caption, vols[i].DriveLetter,
                         vols[i].DriveType.ToString(), vols[i].IsMounted.ToString(),
                         vols[i].Label, vols[i].Name, vols[i].PageFilePresent.ToString(),
@@ -174,33 +153,32 @@ namespace zbxlld.Windows.Discovery
                 }
             }
 
-			bool ismounted, ismletter;
-			foreach (Supplement.IVolumeInfo v in vols) {
-				ismounted = v.IsMounted;
-				ismletter = (v.DriveLetter != null);
+			bool isMounted, ismletter;
+			foreach (var v in vols) {
+				isMounted = v.IsMounted == true;
+				ismletter = v.DriveLetter != null;
 
-				if (v.Automount &&                              // Match to drives mounted automatically
+				if (v.Automount == true &&                      // Match to drives mounted automatically
 				    v.DriveType == dtype &&                     // Match drive type
-				    (!mounted || ismounted) &&                  // If defined to mounted drives, then match mounted drives
-				    (!mfolder || (ismounted && !ismletter)) &&  // If defined to folder mounted drives, then match mounted and not has letter
-				    (!mletter || (ismounted && ismletter)) &&   // If defined to letter mounted drives, then match mounted and has letter
-				    (!nomount || !ismounted) &&                 // If defined to not mounted drives, then match not mounted drives
-				    (!swap || v.PageFilePresent) &&             // If defined to drives that has page files, then match to drives that has page file
-				    (!noswap || !v.PageFilePresent)) {          // If defined to drives that no page files, then match to drives that has no page file
-					Dictionary<string, string> item =
-						new Dictionary<string, string> (2);
+				    (!mounted || isMounted) &&                  // If defined to mounted drives, then match mounted drives
+				    (!mfolder || (isMounted && !ismletter)) &&  // If defined to folder mounted drives, then match mounted and not has letter
+				    (!mletter || (isMounted && ismletter)) &&   // If defined to letter mounted drives, then match mounted and has letter
+				    (!nomount || !isMounted) &&                 // If defined to not mounted drives, then match not mounted drives
+				    (!swap || v.PageFilePresent == true) &&             // If defined to drives that has page files, then match to drives that has page file
+				    (!noswap || v.PageFilePresent != true)) {          // If defined to drives that no page files, then match to drives that has no page file
+					var item = new Dictionary<string, string>(5);
 
-					string pmInstName = string.Empty;
-					if (ismounted) {
-						pmInstName = v.Name.TrimEnd('\\');
-					} else {
-						pmInstName = Supplement.PerfMon.LogicalDisk.GetInstanceName(v.VolumeGuid);
-					}
+					string? pmInstName = v switch
+					{
+						{ IsMounted: true, Name: not null } => v.Name?.TrimEnd('\\'),
+						{ VolumeGuid: not null } => Supplement.PerfMon.LogicalDisk.GetInstanceName(v.VolumeGuid.Value),
+						_ => null
+					};
 
-					item.Add ("FSNAME", v.Name);
-					item.Add ("FSPERFMON", pmInstName);
-					item.Add ("FSLABEL", v.Label ?? "");
-					item.Add ("FSFORMAT", v.VolumeFormat);
+					item.Add ("FSNAME", v.Name ?? string.Empty);
+					item.Add ("FSPERFMON", pmInstName ?? string.Empty);
+					item.Add ("FSLABEL", v.Label ?? string.Empty);
+					item.Add ("FSFORMAT", v.VolumeFormat ?? string.Empty);
 					item.Add ("FSCAPTION", v.Caption);
 					jout.Add (item);
 				}
@@ -211,16 +189,16 @@ namespace zbxlld.Windows.Discovery
 
 		string[] IArgHandler.GetAllowedArgs()
 		{
-			return new string[] {
-				ARG_DRIVE_FIXED,
-				ARG_DRIVE_REMOVABLE,
-				ARG_DRIVE_MOUNTED,
-				ARG_DRIVE_MFOLDER,
-				ARG_DRIVE_MLETTER,
-				ARG_DRIVE_NOMOUNT,
-				ARG_DRIVE_SWAP,
-				ARG_DRIVE_NOSWAP,
-                ARG_DRIVE_NETWORK
+			return new[] {
+				ArgDriveFixed,
+				ArgDriveRemovable,
+				ArgDriveMounted,
+				ArgDriveMfolder,
+				ArgDriveMletter,
+				ArgDriveNomount,
+				ArgDriveSwap,
+				ArgDriveNoswap,
+                ArgDriveNetwork
 			};
 		}
 	}

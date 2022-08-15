@@ -28,14 +28,14 @@ namespace zbxlld.Windows.Supplement
 	{
 		bool Automount { get; }
 		string Caption { get; }
-		string DriveLetter { get; }
+		string? DriveLetter { get; }
 		DriveType DriveType { get; }
 		bool IsMounted { get; }
-		string Label { get; }
-		string Name { get; }
-		bool PageFilePresent { get; }
-		string VolumeFormat { get; }
-		Guid VolumeGuid { get; }
+		string? Label { get; }
+		string? Name { get; }
+		bool? PageFilePresent { get; }
+		string? VolumeFormat { get; }
+		Guid? VolumeGuid { get; }
 	}
 }
 

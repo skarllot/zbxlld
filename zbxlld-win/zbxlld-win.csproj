@@ -8,12 +8,13 @@
         <Company>Fabricio Godoy</Company>
         <Copyright>2022 (c) Fabricio Godoy</Copyright>
         <VersionPrefix>1.0.0</VersionPrefix>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1"/>
-        <PackageReference Include="System.Management" Version="6.0.0"/>
-        <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0"/>
+        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1" />
+        <PackageReference Include="System.Management" Version="6.0.0" />
+        <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

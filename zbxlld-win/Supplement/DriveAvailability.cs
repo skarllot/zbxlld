@@ -21,7 +21,7 @@
 
 namespace zbxlld.Windows.Supplement
 {
-	public enum DriveAvailability
+	public enum DriveAvailability : ushort
 	{
 		Other = 1,
 		Unknown = 2,

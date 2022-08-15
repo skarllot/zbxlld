@@ -60,23 +60,23 @@ namespace zbxlld.Windows.Discovery
 					filter = Supplement.ServiceStartType.Disabled;
 					break;
 				default:
-					return null;
+					return new Supplement.JsonOutput();
 			}
 
-			Supplement.JsonOutput jout = new Supplement.JsonOutput();
-			
-			foreach (ServiceController sc in ServiceController.GetServices()) {
-				Supplement.SCManager scm = new Supplement.SCManager(sc.ServiceName);
-				if ((scm.StartType & filter) != scm.StartType)
+			var jout = new Supplement.JsonOutput();
+
+			using var scm = new Supplement.SCManager();
+			foreach (var sc in ServiceController.GetServices()) {
+				var serviceInfo = scm.GetServiceInfo(sc.ServiceName);
+				if ((serviceInfo.StartType & filter) != serviceInfo.StartType)
 					continue;
 
-				Dictionary<string, string> item =
-					new Dictionary<string, string>(4);
+				var item = new Dictionary<string, string>(4);
 
 				item.Add("SVCNAME", sc.ServiceName);
 				item.Add("SVCDESC", sc.DisplayName);
 				item.Add("SVCSTATUS", sc.Status.ToString());
-				item.Add("SVCSTARTTYPE", scm.StartType.ToString());
+				item.Add("SVCSTARTTYPE", serviceInfo.StartType.ToString());
 				jout.Add(item);
 			}
 

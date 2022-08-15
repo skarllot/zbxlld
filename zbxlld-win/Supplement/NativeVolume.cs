@@ -1,25 +1,5 @@
-//
-//  NativeVolume.cs
-//
-//  Author:
-//       Fabricio Godoy <skarllot@gmail.com>
-//
-//  Copyright (c) 2014 Fabricio Godoy
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Microsoft.Win32;
 
@@ -27,11 +7,11 @@ namespace zbxlld.Windows.Supplement
 {
 	public class NativeVolume : IVolumeInfo
 	{
-		private const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.NativeVolume";
-		private const string KEY_MOUNTED_DEVICES = @"HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices";
-		private const string KEY_VALUE_PREFIX = @"\DosDevices\";
-		private const string KEY_VALUE_GUID_PREFIX = @"\??\Volume";
-		private DriveInfo dinfo;
+		private const string ClassFullPath = "zbxlld.Windows.Supplement.NativeVolume";
+		private const string KeyMountedDevices = @"HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices";
+		private const string KeyValuePrefix = @"\DosDevices\";
+		private const string KeyValueGuidPrefix = @"\??\Volume";
+		private readonly DriveInfo dinfo;
 		private Guid? volGuid;
 
 		public NativeVolume(DriveInfo dinfo)
@@ -50,6 +30,7 @@ namespace zbxlld.Windows.Supplement
 			return ret;
 		}
 
+		[MemberNotNullWhen(true, nameof(Label))]
 		public bool Automount {
 			get {
 				return dinfo.IsReady;
@@ -58,13 +39,13 @@ namespace zbxlld.Windows.Supplement
 
 		public string Caption {
 			get {
-				string label = Label;
+				string? label = Label;
 				string name = DriveLetter;
 				
 				if (label == null)
 					return name;
 				else
-					return string.Format("{0} ({1})", label, name);
+					return $"{label} ({name})";
 			}
 		}
 
@@ -86,13 +67,12 @@ namespace zbxlld.Windows.Supplement
 			}
 		}
 
-		public string Label {
+		public string? Label {
             get
             {
-                if (dinfo.IsReady)
-                    return dinfo.VolumeLabel;
-                else
-                    return null;
+	            return dinfo.IsReady
+		            ? dinfo.VolumeLabel
+		            : null;
             }
 		}
 
@@ -102,84 +82,78 @@ namespace zbxlld.Windows.Supplement
 			}
 		}
 
-		public bool PageFilePresent {
+		public bool? PageFilePresent {
 			get {
-				return false;
+				return null;
 			}
 		}
 
-		public string VolumeFormat {
+		public string? VolumeFormat {
             get
             {
-                if (dinfo.IsReady)
-                    return dinfo.DriveFormat;
-                else
-                    return null;
+	            return dinfo.IsReady
+		            ? dinfo.DriveFormat
+		            : null;
             }
 		}
 
-		public Guid VolumeGuid {
-			get {
-				TryGetVolumeGuid(out var guid);
-                return guid;
+		public Guid? VolumeGuid {
+			get
+			{
+				return volGuid ??= TryGetVolumeGuid();
 			}
 		}
 
-		private bool TryGetVolumeGuid(out Guid volGuid)
+		private Guid? TryGetVolumeGuid()
         {
-            volGuid = Guid.Empty;
-
-            if (this.volGuid.HasValue)
+            if (volGuid.HasValue)
             {
-                if (this.volGuid.Value == Guid.Empty)
-                    return false;
+                if (volGuid.Value == Guid.Empty)
+                    return null;
 
-                volGuid = this.volGuid.Value;
-                return true;
+                return volGuid.Value;
             }
 
-            this.volGuid = Guid.Empty;
-            RegistryKey regKey = Registry.LocalMachine.OpenSubKey(KEY_MOUNTED_DEVICES);
+            using var regKey = Registry.LocalMachine.OpenSubKey(KeyMountedDevices);
             if (regKey == null)
-                return false;
+                return null;
 
-            object keyval;
-            try { keyval = regKey.GetValue(KEY_VALUE_PREFIX + DriveLetter); }
+            object? keyval;
+            try { keyval = regKey.GetValue(KeyValuePrefix + DriveLetter); }
             catch (Exception e)
             {
                 if (MainClass.DEBUG)
                 {
                     MainClass.WriteLogEntry(string.Format(
-                    "{0}.get_VolumeGuid: Could not read value from registry key.", CLASS_FULL_PATH));
+                    "{0}.get_VolumeGuid: Could not read value from registry key.", ClassFullPath));
                     MainClass.WriteLogEntry("Exception:");
                     MainClass.WriteLogEntry(e.ToString());
                 }
-                return false;
+                return null;
             }
-            byte[] header = (byte[])keyval;
+            var header = (byte[]?)keyval;
             string[] values = regKey.GetValueNames();
-            byte[] temp;
             foreach (string item in values)
             {
-                if (item.IndexOf(KEY_VALUE_GUID_PREFIX) == 0)
+                if (item.IndexOf(KeyValueGuidPrefix, StringComparison.Ordinal) == 0)
                 {
-                    temp = (byte[])regKey.GetValue(item);
-                    if (SequenceEqual<byte>(header, temp))
+	                var temp = (byte[]?)regKey.GetValue(item);
+	                if (SequenceEqual(header, temp))
                     {
-                        regKey.Close();
-                        volGuid = new Guid(item.Substring(item.IndexOf('{')));
-                        this.volGuid = volGuid;
-                        return true;
+                        return volGuid = Guid.Parse(item.AsSpan(item.IndexOf('{')));
                     }
                 }
-            };
+            }
 
-            regKey.Close();
-            return false;
+            return null;
         }
 
-		private static bool SequenceEqual<T>(T[] a1, T[] a2) where T : IComparable<T>
+		private static bool SequenceEqual<T>(T[]? a1, T[]? a2) where T : IComparable<T>
 		{
+			if (a1 is null && a2 is null)
+				return true;
+			if (a1 is null || a2 is null)
+				return false;
 			if (a1.Length != a2.Length)
 				return false;
 

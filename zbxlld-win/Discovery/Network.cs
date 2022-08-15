@@ -39,16 +39,15 @@ namespace zbxlld.Windows.Discovery
 		public Supplement.JsonOutput GetOutput(string arg)
 		{
 			if (arg != ARG_NETWORK)
-				return null;
+				return new Supplement.JsonOutput();
 
-			Supplement.JsonOutput jout = new Supplement.JsonOutput ();
+			var jout = new Supplement.JsonOutput ();
 			
 			NetworkInterface[] netifs = NetworkInterface.GetAllNetworkInterfaces ();
 			foreach (NetworkInterface n in netifs) {
 				if (n.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
 				    n.NetworkInterfaceType != NetworkInterfaceType.Tunnel) {
-					Dictionary<string, string> item =
-						new Dictionary<string, string> (3);
+					var item = new Dictionary<string, string> (3);
 					
 					item.Add ("IFDESC", n.Description);
 					item.Add ("IFNAME", n.Name);

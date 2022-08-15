@@ -25,14 +25,11 @@ using System.Collections.Generic;
 
 namespace zbxlld.Windows.Supplement.PerfMon
 {
-	public class LogicalDisk
+	public static class LogicalDisk
 	{
-		private const string MSG_EXCEPTION = "Unmounted volumes count and Performance Monitor invalid instances name count" +
-		                                     "don't match";
-
-		private const string COUNTER_LOGICAL_DISK = "236";
-		private const string COUNTER_FREE_MB = "410";
-		private const long MB_MULT = 1048576;
+		private const string CounterLogicalDisk = "236";
+		private const string CounterFreeMb = "410";
+		private const long MbMult = 1048576;
 
 		// Relates Performance Monitor instance name to volume GUID.
 		private static Dictionary<Guid, string> perfMonGuid = CreateVolumeDictionary();
@@ -42,19 +39,19 @@ namespace zbxlld.Windows.Supplement.PerfMon
 		private static Dictionary<Guid, string> CreateVolumeDictionary()
 		{
 			// =====         WMI         =====
-			Win32_Volume[] vols = Win32_Volume.GetAllVolumes();
+			Win32Volume[] vols = Win32Volume.GetAllVolumes();
 			// Free megabytes and volume GUID relation
 			var wmiFree = new Dictionary<ulong, Guid>(vols.Length);
 			// Volume name and volume GUID relation
 			var wmiName = new Dictionary<string, Guid>(vols.Length);
 
-			foreach (Win32_Volume v in vols) {
+			foreach (Win32Volume v in vols) {
 				if (v.Automount &&
 				    v.DriveType == System.IO.DriveType.Fixed) {
 					if (v.IsMounted) {
 						wmiName.Add(v.Name.TrimEnd('\\'), v.DeviceGuid);
 					} else {
-						wmiFree.Add(v.FreeSpace / MB_MULT, v.DeviceGuid);
+						wmiFree.Add(v.FreeSpace / MbMult, v.DeviceGuid);
 					}
 				}
 			}
@@ -62,24 +59,22 @@ namespace zbxlld.Windows.Supplement.PerfMon
 			var result = new Dictionary<Guid, string>(wmiFree.Count + wmiName.Count);
 
 			// ===== PERFORMANCE MONITOR ======
-			PerformanceCounterCategory perfCat = new PerformanceCounterCategory(
-				Localization.GetName(COUNTER_LOGICAL_DISK));
+			var perfCat = new PerformanceCounterCategory(Localization.GetName(CounterLogicalDisk));
 			// TODO: Find a faster way to get instance names.
 			string[] instances = perfCat.GetInstanceNames();
 			// Free megabytes and Performance Monitor instance name
-			Dictionary<ulong, string> perfFree = new Dictionary<ulong, string>(instances.Length);
+			var perfFree = new Dictionary<ulong, string>(instances.Length);
 
 			foreach (string item in instances) {
 				if (item == "_Total")
 					continue;
 
-				Guid volId = Guid.Empty;
-				if (wmiName.TryGetValue(item, out volId)) {
+				if (wmiName.TryGetValue(item, out var volId)) {
 					result.Add(volId, item);
 				} else {
 					var p = new PerformanceCounter(
-						Localization.GetName(COUNTER_LOGICAL_DISK),
-						Localization.GetName(COUNTER_FREE_MB),
+						Localization.GetName(CounterLogicalDisk),
+						Localization.GetName(CounterFreeMb),
 						item);
 					perfFree.Add((ulong)p.RawValue, item);
 					p.Close();
@@ -87,26 +82,18 @@ namespace zbxlld.Windows.Supplement.PerfMon
 				}
 			}
 
-			ulong[] warray = new ulong[wmiFree.Count];
-			ulong[] pmarray = new ulong[perfFree.Count];
-			if (warray.Length != pmarray.Length)
-				throw new NotSupportedException(MSG_EXCEPTION);
-			wmiFree.Keys.CopyTo(warray, 0);
-			perfFree.Keys.CopyTo(pmarray, 0);
-			Array.Sort(warray);
-			Array.Sort(pmarray);
-
-			for (int i = 0; i < warray.Length; i++) {
-				result.Add(wmiFree[warray[i]], perfFree[pmarray[i]]);
+			foreach (var pf in perfFree)
+			{
+				if (wmiFree.TryGetValue(pf.Key, out var guid))
+					result.Add(guid, pf.Value);
 			}
 
 			return result;
 		}
 
-		public static string GetInstanceName(Guid guid)
+		public static string? GetInstanceName(Guid guid)
 		{
-			string ret = null;
-			perfMonGuid.TryGetValue(guid, out ret);
+			perfMonGuid.TryGetValue(guid, out string? ret);
 			return ret;
 		}
 	}
