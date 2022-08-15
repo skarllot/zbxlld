@@ -24,7 +24,7 @@ using System.Collections.Generic;
 
 namespace zbxlld.Windows
 {
-	class MainClass
+	internal class MainClass
     {
 #if DEBUG
         public const bool DEBUG = true;
@@ -45,9 +45,9 @@ namespace zbxlld.Windows
         public const string PROGRAM_VERSION = "0.7.0.30";
         public const string PROGRAM_VERSION_SIMPLE = "0.7";
         public const string PROGRAM_TITLE = PROGRAM_NAME + " " + PROGRAM_VERSION_SIMPLE + PROGRAM_TITLE_SUFFIX;
-        static Logger log = null;
+        private static Logger log = null;
 
-		static IArgHandler[] ARG_HANDLERS = new IArgHandler[] {
+        private static IArgHandler[] ARG_HANDLERS = new IArgHandler[] {
 			Discovery.Drive.Default, Discovery.Network.Default, Discovery.Service.Default };
 
 		public static int Main(string[] args)
@@ -82,8 +82,7 @@ namespace zbxlld.Windows
 				}
 			}
 
-			IArgHandler val;
-			if (!hList.TryGetValue(args [0], out val)) {
+			if (!hList.TryGetValue(args [0], out var val)) {
                 if (DEBUG)
                     log.WriteEntry(string.Format("Could not found args[0] = {0}", args[0]));
 

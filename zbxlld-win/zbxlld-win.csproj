@@ -1,59 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{43E7116A-1642-4E34-89FA-F20E68A1C9A6}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>zbxlld.Windows</RootNamespace>
-    <StartupObject>zbxlld.Windows.MainClass</StartupObject>
-    <AssemblyName>zbxlld-win</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <ReleaseVersion>0.5.1</ReleaseVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <Commandlineparameters>drive.discovery.fixed</Commandlineparameters>
-    <DebugSymbols>True</DebugSymbols>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Management" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ErrorId.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Discovery\Drive.cs" />
-    <Compile Include="IArgHandler.cs" />
-    <Compile Include="Discovery\Network.cs" />
-    <Compile Include="Discovery\Service.cs" />
-    <Compile Include="Supplement\JsonOutput.cs" />
-    <Compile Include="Supplement\SCManager.cs" />
-    <Compile Include="Supplement\ServiceStartType.cs" />
-    <Compile Include="Supplement\Win32_Volume.cs" />
-    <Compile Include="Supplement\DriveStatus.cs" />
-    <Compile Include="Supplement\DriveAvailability.cs" />
-    <Compile Include="Supplement\PerfMon\LogicalDisk.cs" />
-    <Compile Include="Supplement\PerfMon\Localization.cs" />
-    <Compile Include="Supplement\IVolumeInfo.cs" />
-    <Compile Include="Supplement\NativeVolume.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <RootNamespace>zbxlld.Windows</RootNamespace>
+        <Description>ZBXLLD provides additional discovery features to Zabbix agent.</Description>
+        <Company>Fabricio Godoy</Company>
+        <Copyright>2022 (c) Fabricio Godoy</Copyright>
+        <VersionPrefix>1.0.0</VersionPrefix>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1"/>
+        <PackageReference Include="System.Management" Version="6.0.0"/>
+        <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0"/>
+    </ItemGroup>
+
 </Project>

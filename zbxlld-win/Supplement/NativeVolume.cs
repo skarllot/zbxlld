@@ -22,18 +22,17 @@
 using System;
 using System.IO;
 using Microsoft.Win32;
-using System.Collections;
 
 namespace zbxlld.Windows.Supplement
 {
 	public class NativeVolume : IVolumeInfo
 	{
-        const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.NativeVolume";
-		const string KEY_MOUNTED_DEVICES = @"HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices";
-		const string KEY_VALUE_PREFIX = @"\DosDevices\";
-		const string KEY_VALUE_GUID_PREFIX = @"\??\Volume";
-		DriveInfo dinfo;
-        Guid? volGuid;
+		private const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.NativeVolume";
+		private const string KEY_MOUNTED_DEVICES = @"HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices";
+		private const string KEY_VALUE_PREFIX = @"\DosDevices\";
+		private const string KEY_VALUE_GUID_PREFIX = @"\??\Volume";
+		private DriveInfo dinfo;
+		private Guid? volGuid;
 
 		public NativeVolume(DriveInfo dinfo)
 		{
@@ -50,8 +49,6 @@ namespace zbxlld.Windows.Supplement
 
 			return ret;
 		}
-
-		#region IVolumeInfo implementation
 
 		public bool Automount {
 			get {
@@ -123,15 +120,12 @@ namespace zbxlld.Windows.Supplement
 
 		public Guid VolumeGuid {
 			get {
-                Guid guid;
-                TryGetVolumeGuid(out guid);
+				TryGetVolumeGuid(out var guid);
                 return guid;
 			}
 		}
 
-		#endregion
-
-        private bool TryGetVolumeGuid(out Guid volGuid)
+		private bool TryGetVolumeGuid(out Guid volGuid)
         {
             volGuid = Guid.Empty;
 

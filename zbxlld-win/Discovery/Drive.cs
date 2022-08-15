@@ -22,25 +22,24 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using zbxlld.Windows;
 
 namespace zbxlld.Windows.Discovery
 {
 	public class Drive : IArgHandler
 	{
-		const string ARG_DRIVE = "drive.discovery";
-		const string ARG_DRIVE_FIXED = ARG_DRIVE + ".fixed";
-		const string ARG_DRIVE_REMOVABLE = ARG_DRIVE + ".removable";
-		const string ARG_DRIVE_MOUNTED = ARG_DRIVE + ".mounted";
-		const string ARG_DRIVE_MFOLDER = ARG_DRIVE + ".mountfolder";
-		const string ARG_DRIVE_MLETTER = ARG_DRIVE + ".mountletter";
-		const string ARG_DRIVE_NOMOUNT = ARG_DRIVE + ".nomount";
-		const string ARG_DRIVE_SWAP = ARG_DRIVE + ".swap";
-		const string ARG_DRIVE_NOSWAP = ARG_DRIVE + ".noswap";
-        const string ARG_DRIVE_NETWORK = ARG_DRIVE + ".network";
-        const string CLASS_FULL_PATH = "zbxlld.Windows.Discovery.Drive";
+		private const string ARG_DRIVE = "drive.discovery";
+		private const string ARG_DRIVE_FIXED = ARG_DRIVE + ".fixed";
+		private const string ARG_DRIVE_REMOVABLE = ARG_DRIVE + ".removable";
+		private const string ARG_DRIVE_MOUNTED = ARG_DRIVE + ".mounted";
+		private const string ARG_DRIVE_MFOLDER = ARG_DRIVE + ".mountfolder";
+		private const string ARG_DRIVE_MLETTER = ARG_DRIVE + ".mountletter";
+		private const string ARG_DRIVE_NOMOUNT = ARG_DRIVE + ".nomount";
+		private const string ARG_DRIVE_SWAP = ARG_DRIVE + ".swap";
+		private const string ARG_DRIVE_NOSWAP = ARG_DRIVE + ".noswap";
+		private const string ARG_DRIVE_NETWORK = ARG_DRIVE + ".network";
+		private const string CLASS_FULL_PATH = "zbxlld.Windows.Discovery.Drive";
 
-		static Drive def = new Drive();
+		private static Drive def = new Drive();
 
 		public static Drive Default {
 			get {
@@ -88,9 +87,7 @@ namespace zbxlld.Windows.Discovery
             return true;
         }
 
-		#region IArgHandler implementation
-
-		public Supplement.JsonOutput GetOutput(string key)
+        public Supplement.JsonOutput GetOutput(string key)
 		{
 			bool mounted = false;
 			bool mfolder = false;
@@ -226,8 +223,6 @@ namespace zbxlld.Windows.Discovery
                 ARG_DRIVE_NETWORK
 			};
 		}
-
-		#endregion
 	}
 }
 

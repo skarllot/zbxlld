@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace zbxlld.Windows
+﻿namespace zbxlld.Windows
 {
-    enum ErrorId : int
+    internal enum ErrorId : int
     {
         // No error detected
         NoError = 0,

@@ -28,11 +28,11 @@ namespace zbxlld.Windows.Supplement
 {
 	public class Win32_Volume : IVolumeInfo
 	{
-        const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.Win32_Volume";
-		const string WQL_VOLUME = "Select * from Win32_Volume";
-		const string UNMOUNTED_PREFIX = @"\\?";
+		private const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.Win32_Volume";
+		private const string WQL_VOLUME = "Select * from Win32_Volume";
+		private const string UNMOUNTED_PREFIX = @"\\?";
 
-        Dictionary<string, object> properties;
+		private Dictionary<string, object> properties;
 
 		private Win32_Volume(ManagementObject mgtobj)
 		{
@@ -41,17 +41,14 @@ namespace zbxlld.Windows.Supplement
                 properties.Add(item.Name, item.Value);
 		}
 
-        #region Properties
-
-        /// <summary>
+		/// <summary>
 		/// If true, the volume is mounted to the file system automatically when the first I/O is issued. If false, the
 		/// volume is not mounted until explicitly mounted by using the Mount method, or by adding a drive letter or
 		/// mount point.
 		/// </summary>
 		public bool Automount {
 			get {
-                object val;
-                if (!properties.TryGetValue("Automount", out val))
+				if (!properties.TryGetValue("Automount", out var val))
                     return false;
                 return (bool)(val ?? false);
 			}
@@ -62,8 +59,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public DriveAvailability Availability {
 			get {
-                object val;
-                if (!properties.TryGetValue("Availability", out val))
+				if (!properties.TryGetValue("Availability", out var val))
                     return DriveAvailability.Unknown;
 				return (DriveAvailability)(Enum.ToObject(typeof(DriveAvailability), val ?? DriveAvailability.Unknown));
 			}
@@ -72,12 +68,11 @@ namespace zbxlld.Windows.Supplement
 		/// <summary>
 		/// Size of the volume in bytes.
 		/// </summary>
-		public UInt64 Capacity {
+		public ulong Capacity {
 			get {
-                object val;
-                if (!properties.TryGetValue("Capacity", out val))
+				if (!properties.TryGetValue("Capacity", out var val))
                     return 0;
-				return (UInt64)(val ?? 0);
+				return (ulong)(val ?? 0);
 			}
 		}
 
@@ -86,8 +81,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string DeviceID {
 			get {
-                object val;
-                if (!properties.TryGetValue("DeviceID", out val))
+				if (!properties.TryGetValue("DeviceID", out var val))
                     return null;
 				return (string)val;
 			}
@@ -109,8 +103,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string DriveLetter {
 			get {
-                object val;
-                if (!properties.TryGetValue("DriveLetter", out val))
+				if (!properties.TryGetValue("DriveLetter", out var val))
                     return null;
 				return (string)val;
 			}
@@ -121,8 +114,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public DriveType DriveType {
 			get {
-                object val;
-                if (!properties.TryGetValue("DriveType", out val))
+				if (!properties.TryGetValue("DriveType", out var val))
                     return DriveType.Unknown;
 				return (DriveType)(Enum.ToObject(typeof(DriveType), val ?? System.IO.DriveType.Unknown));
 			}
@@ -133,8 +125,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string FileSystem {
 			get {
-                object val;
-                if (!properties.TryGetValue("FileSystem", out val))
+				if (!properties.TryGetValue("FileSystem", out var val))
                     return null;
 				return (string)val;
 			}
@@ -143,12 +134,11 @@ namespace zbxlld.Windows.Supplement
 		/// <summary>
 		/// Number of bytes of available space on the volume.
 		/// </summary>
-		public UInt64 FreeSpace {
+		public ulong FreeSpace {
 			get {
-                object val;
-                if (!properties.TryGetValue("FreeSpace", out val))
-                    return UInt64.MaxValue;
-				return (UInt64)(val ?? UInt64.MaxValue);
+				if (!properties.TryGetValue("FreeSpace", out var val))
+                    return ulong.MaxValue;
+				return (ulong)(val ?? ulong.MaxValue);
 			}
 		}
 
@@ -169,8 +159,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string Label {
 			get {
-                object val;
-                if (!properties.TryGetValue("Label", out val))
+				if (!properties.TryGetValue("Label", out var val))
                     return null;
 				return (string)val;
 			}
@@ -182,8 +171,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public string Name {
 			get {
-                object val;
-                if (!properties.TryGetValue("Name", out val))
+				if (!properties.TryGetValue("Name", out var val))
                     return null;
 				return (string)val;
 			}
@@ -194,8 +182,7 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public bool PageFilePresent {
 			get {
-                object val;
-                if (!properties.TryGetValue("PageFilePresent", out val))
+				if (!properties.TryGetValue("PageFilePresent", out var val))
                     return false;
                 return (bool)(val ?? false);
 			}
@@ -206,16 +193,13 @@ namespace zbxlld.Windows.Supplement
 		/// </summary>
 		public DriveStatus StatusInfo {
 			get {
-                object val;
-                if (!properties.TryGetValue("StatusInfo", out val))
+				if (!properties.TryGetValue("StatusInfo", out var val))
                     return DriveStatus.Unknown;
 				return (DriveStatus)(Enum.ToObject(typeof(DriveStatus), val ?? DriveStatus.Unknown));
 			}
 		}
 
-        #endregion
-
-        public static Win32_Volume[] GetAllVolumes()
+		public static Win32_Volume[] GetAllVolumes()
 		{
 			ManagementObjectCollection wmicol = 
 				new ManagementObjectSearcher(WQL_VOLUME).Get();
@@ -243,8 +227,6 @@ namespace zbxlld.Windows.Supplement
 				return string.Format("{0} ({1})", label, name);
 		}
 
-		#region IVolumeInfo implementation
-
 		string IVolumeInfo.Caption {
 			get {
 				return ToString();
@@ -262,7 +244,5 @@ namespace zbxlld.Windows.Supplement
 				return DeviceGuid;
 			}
 		}
-
-		#endregion
 	}
 }

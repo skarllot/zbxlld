@@ -19,7 +19,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Net.NetworkInformation;
 using System.Collections.Generic;
 
@@ -29,15 +28,13 @@ namespace zbxlld.Windows.Discovery
 	{
 		private const string ARG_NETWORK = "network.discovery";
 
-		static Network def = new Network();
+		private static Network def = new Network();
 
 		public static Network Default {
 			get {
 				return def;
 			}
 		}
-
-		#region IArgHandler implementation
 
 		public Supplement.JsonOutput GetOutput(string arg)
 		{
@@ -63,16 +60,10 @@ namespace zbxlld.Windows.Discovery
 			return jout;
 		}
 
-		#endregion
-
-		#region IArgHandler implementation
-
 		string[] IArgHandler.GetAllowedArgs()
 		{
 			return new string[] { ARG_NETWORK };
 		}
-
-		#endregion
 	}
 }
 

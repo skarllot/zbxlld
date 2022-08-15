@@ -19,9 +19,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.ServiceProcess;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
 namespace zbxlld.Windows.Discovery
@@ -34,15 +32,13 @@ namespace zbxlld.Windows.Discovery
 		private const string ARG_SERVICE_DEMAND = "service.discovery.demand";
 		private const string ARG_SERVICE_DISABLED = "service.discovery.disabled";
 
-		static Service def = new Service();
+		private static Service def = new Service();
 
 		public static Service Default {
 			get {
 				return def;
 			}
 		}
-
-		#region IArgHandler implementation
 
 		public Supplement.JsonOutput GetOutput(string arg)
 		{
@@ -87,20 +83,11 @@ namespace zbxlld.Windows.Discovery
 			return jout;
 		}
 
-		#endregion
-
-		#region IArgHandler implementation
-
 		string[] IArgHandler.GetAllowedArgs()
 		{
 			return new string[] { ARG_SERVICE, ARG_SERVICE_ANY, ARG_SERVICE_AUTO,
 				ARG_SERVICE_DEMAND, ARG_SERVICE_DISABLED };
 		}
-
-		#endregion
-
-
-
 	}
 }
 

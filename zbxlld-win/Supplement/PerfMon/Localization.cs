@@ -19,7 +19,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using Microsoft.Win32;
 using System.Collections.Generic;
 
@@ -27,10 +26,10 @@ namespace zbxlld.Windows.Supplement.PerfMon
 {
 	public class Localization
 	{
-        const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.PerfMon.Localization";
-		const string KEY_PERFLIB_CURLANG = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\CurrentLanguage";
-		const string KEY_PERFLIB_DEFAULT = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\009";
-		static Dictionary<string, string> counterList;
+        private const string CLASS_FULL_PATH = "zbxlld.Windows.Supplement.PerfMon.Localization";
+        private const string KEY_PERFLIB_CURLANG = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\CurrentLanguage";
+        private const string KEY_PERFLIB_DEFAULT = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\009";
+        private static Dictionary<string, string> counterList;
 
         static Localization()
         {

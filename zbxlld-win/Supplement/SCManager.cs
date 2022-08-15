@@ -26,9 +26,9 @@ namespace zbxlld.Windows.Supplement
 {
 	public class SCManager
 	{
-		static IntPtr scmHandle = IntPtr.Zero;
+		private static IntPtr scmHandle = IntPtr.Zero;
 
-		QueryServiceConfigStruct qscs;
+		private QueryServiceConfigStruct qscs;
 
 		public SCManager(string serviceName)
 		{
@@ -74,17 +74,15 @@ namespace zbxlld.Windows.Supplement
 			}
 		}
 
-		#region Unmanaged
-
 		[DllImport("advapi32.dll", EntryPoint="OpenSCManagerW", ExactSpelling=true, CharSet=CharSet.Unicode, SetLastError=true)]
 		private static extern IntPtr OpenSCManager(string machineName, string databaseName, ACCESS_MASK dwAccess);
 		
 		[DllImport("advapi32.dll", SetLastError=true, CharSet=CharSet.Auto)]
-		static extern IntPtr OpenService(IntPtr hSCManager, string lpServiceName, SERVICE_ACCESS dwDesiredAccess);
+		private static extern IntPtr OpenService(IntPtr hSCManager, string lpServiceName, SERVICE_ACCESS dwDesiredAccess);
 		
 		[DllImport("advapi32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
-		private static extern Boolean QueryServiceConfig(IntPtr hService, IntPtr intPtrQueryConfig,
-		                                                 UInt32 cbBufSize, out UInt32 pcbBytesNeeded);
+		private static extern bool QueryServiceConfig(IntPtr hService, IntPtr intPtrQueryConfig,
+		                                                 uint cbBufSize, out uint pcbBytesNeeded);
 
 		[DllImport("advapi32.dll", SetLastError=true)]
 		[return: MarshalAs(UnmanagedType.Bool)]
@@ -174,8 +172,6 @@ namespace zbxlld.Windows.Supplement
 			// A device driver started by the IoInitSystem function. This value is valid only for driver services.
 			SERVICE_SYSTEM_START = 0x00000001
 		}
-
-		#endregion
 	}
 }
 

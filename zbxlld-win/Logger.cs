@@ -27,8 +27,8 @@ namespace zbxlld.Windows
 {
     internal class Logger : IDisposable
     {
-        StreamWriter writer;
-        static readonly string SEPARATOR = new string('=', 80);
+        private StreamWriter writer;
+        private static readonly string SEPARATOR = new string('=', 80);
 
         public Logger(string filepath)
         {

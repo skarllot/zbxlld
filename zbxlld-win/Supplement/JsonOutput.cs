@@ -62,8 +62,6 @@ namespace zbxlld.Windows.Supplement
 			str.AppendLine("\n] }");
 			return str.ToString();
 		}
-		
-		#region IList implementation
 
 		public int IndexOf (Dictionary<string, string> item)
 		{
@@ -88,10 +86,6 @@ namespace zbxlld.Windows.Supplement
 				list[index] = value;
 			}
 		}
-
-		#endregion
-
-		#region ICollection implementation
 
 		public void Add (Dictionary<string, string> item)
 		{
@@ -130,25 +124,15 @@ namespace zbxlld.Windows.Supplement
 			}
 		}
 
-		#endregion
-
-		#region IEnumerable implementation
-
 		public IEnumerator<Dictionary<string, string>> GetEnumerator ()
 		{
 			return list.GetEnumerator();
 		}
 
-		#endregion
-
-		#region IEnumerable implementation
-
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
 		{
 			return list.GetEnumerator();
 		}
-
-		#endregion
 	}
 }
 
