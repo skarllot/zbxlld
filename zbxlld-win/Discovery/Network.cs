@@ -1,68 +1,30 @@
-//
-//  Network.cs
-//
-//  Author:
-//       Fabricio Godoy <skarllot@gmail.com>
-//
-//  Copyright (c) 2013 Fabricio Godoy
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 using System.Net.NetworkInformation;
-using System.Collections.Generic;
+using System.Text.Json;
 
 namespace zbxlld.Windows.Discovery
 {
-	public class Network : IArgHandler
-	{
-		private const string ARG_NETWORK = "network.discovery";
+    public class Network
+    {
+        public void GetAll(Utf8JsonWriter writer, string? keySuffix)
+        {
+            writer.WriteStartArray();
 
-		private static Network def = new Network();
+            var netifs = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface n in netifs)
+            {
+                if (n.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
+                    n.NetworkInterfaceType != NetworkInterfaceType.Tunnel)
+                {
+                    writer.WriteStartObject();
+                    writer.WriteZabbixMacro("IFDESC", keySuffix, n.Description);
+                    writer.WriteZabbixMacro("IFNAME", keySuffix, n.Name);
+                    writer.WriteZabbixMacro("IFADDR", keySuffix, n.GetPhysicalAddress().ToString());
+                    writer.WriteZabbixMacro("IFTYPE", keySuffix, n.NetworkInterfaceType.ToString());
+                    writer.WriteEndObject();
+                }
+            }
 
-		public static Network Default {
-			get {
-				return def;
-			}
-		}
-
-		public Supplement.JsonOutput GetOutput(string arg)
-		{
-			if (arg != ARG_NETWORK)
-				return new Supplement.JsonOutput();
-
-			var jout = new Supplement.JsonOutput ();
-			
-			NetworkInterface[] netifs = NetworkInterface.GetAllNetworkInterfaces ();
-			foreach (NetworkInterface n in netifs) {
-				if (n.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
-				    n.NetworkInterfaceType != NetworkInterfaceType.Tunnel) {
-					var item = new Dictionary<string, string> (3);
-					
-					item.Add ("IFDESC", n.Description);
-					item.Add ("IFNAME", n.Name);
-					item.Add ("IFADDR", n.GetPhysicalAddress ().ToString ());
-					jout.Add (item);
-				}
-			}
-
-			return jout;
-		}
-
-		string[] IArgHandler.GetAllowedArgs()
-		{
-			return new string[] { ARG_NETWORK };
-		}
-	}
+            writer.WriteEndArray();
+        }
+    }
 }
-

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Management;
 using System.IO;
 using System.Linq;
+using System.Management;
 
-namespace zbxlld.Windows.Supplement
+namespace zbxlld.Windows.DriveDiscovery
 {
 	public class Win32Volume : IVolumeInfo
 	{
@@ -17,7 +16,6 @@ namespace zbxlld.Windows.Supplement
 		private Win32Volume(ManagementObject mgtobj)
 		{
 			Automount = (bool)mgtobj.Properties["Automount"].Value;
-			Availability = (DriveAvailability)Enum.ToObject(typeof(DriveAvailability),mgtobj.Properties["Availability"].Value);
 			Capacity = (ulong)mgtobj.Properties["Capacity"].Value;
 			DeviceId = (string)mgtobj.Properties["DeviceID"].Value;
 			DriveLetter = (string?)mgtobj.Properties["DriveLetter"].Value;
@@ -26,7 +24,6 @@ namespace zbxlld.Windows.Supplement
 			FreeSpace = (ulong)mgtobj.Properties["FreeSpace"].Value;
 			Label = (string?)mgtobj.Properties["Label"].Value;
 			Name = (string)mgtobj.Properties["Name"].Value;
-			StatusInfo = (DriveStatus)Enum.ToObject(typeof(DriveStatus), mgtobj.Properties["StatusInfo"].Value);
 
             properties = new Dictionary<string, object?>(mgtobj.Properties.Count);
             foreach (var item in mgtobj.Properties)
@@ -43,7 +40,13 @@ namespace zbxlld.Windows.Supplement
 		/// <summary>
 		/// Describes the availability and status of the device.
 		/// </summary>
-		public DriveAvailability Availability { get; }
+		public DriveAvailability? Availability {
+			get {
+				if (!properties.TryGetValue("Availability", out object? val))
+					return null;
+				return val is not null ? (DriveAvailability)Enum.ToObject(typeof(DriveAvailability), val) : null;
+			}
+		}
 
 		/// <summary>
 		/// Size of the volume in bytes.
@@ -117,7 +120,13 @@ namespace zbxlld.Windows.Supplement
 		/// <summary>
 		/// Indicates the state of the logical device.
 		/// </summary>
-		public DriveStatus StatusInfo { get; }
+		public DriveStatus? StatusInfo {
+			get {
+				if (!properties.TryGetValue("StatusInfo", out object? val))
+					return null;
+				return val is not null ? (DriveStatus)Enum.ToObject(typeof(DriveStatus), val) : null;
+			}
+		}
 
 		public static Win32Volume[] GetAllVolumes()
 		{

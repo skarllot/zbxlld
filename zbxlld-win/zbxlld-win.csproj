@@ -12,9 +12,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Jab" Version="0.8.3" />
+        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="6.0.0" />
         <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1" />
         <PackageReference Include="System.Management" Version="6.0.0" />
         <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
+        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.0.9" />
     </ItemGroup>
 
 </Project>

@@ -1,33 +1,25 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using zbxlld.Windows.Supplement;
 
-namespace zbxlld.Windows.Supplement
+namespace zbxlld.Windows.DriveDiscovery
 {
 	public class NativeVolume : IVolumeInfo
 	{
-		private const string ClassFullPath = "zbxlld.Windows.Supplement.NativeVolume";
 		private const string KeyMountedDevices = @"HKEY_LOCAL_MACHINE\SYSTEM\MountedDevices";
 		private const string KeyValuePrefix = @"\DosDevices\";
 		private const string KeyValueGuidPrefix = @"\??\Volume";
+		private readonly ILogger<NativeVolume> _logger;
 		private readonly DriveInfo dinfo;
 		private Guid? volGuid;
 
-		public NativeVolume(DriveInfo dinfo)
+		public NativeVolume(ILogger<NativeVolume> logger, DriveInfo dinfo)
 		{
+			_logger = logger;
 			this.dinfo = dinfo;
-		}
-
-		public static NativeVolume[] GetVolumes() {
-			DriveInfo[] di = DriveInfo.GetDrives();
-			NativeVolume[] ret = new NativeVolume[di.Length];
-
-			for (int i = 0; i < di.Length; i++) {
-				ret[i] = new NativeVolume(di[i]);
-			}
-
-			return ret;
 		}
 
 		[MemberNotNullWhen(true, nameof(Label))]
@@ -41,11 +33,10 @@ namespace zbxlld.Windows.Supplement
 			get {
 				string? label = Label;
 				string name = DriveLetter;
-				
-				if (label == null)
-					return name;
-				else
-					return $"{label} ({name})";
+
+				return label == null
+					? name
+					: $"{label} ({name})";
 			}
 		}
 
@@ -122,13 +113,7 @@ namespace zbxlld.Windows.Supplement
             try { keyval = regKey.GetValue(KeyValuePrefix + DriveLetter); }
             catch (Exception e)
             {
-                if (MainClass.DEBUG)
-                {
-                    MainClass.WriteLogEntry(string.Format(
-                    "{0}.get_VolumeGuid: Could not read value from registry key.", ClassFullPath));
-                    MainClass.WriteLogEntry("Exception:");
-                    MainClass.WriteLogEntry(e.ToString());
-                }
+	            _logger.LogError(e, "Error trying to read value from registry key");
                 return null;
             }
             var header = (byte[]?)keyval;

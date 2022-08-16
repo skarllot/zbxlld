@@ -1,17 +1,23 @@
 using Microsoft.Win32;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace zbxlld.Windows.Supplement.PerfMon
 {
-	public class Localization
+	public sealed class Localization
 	{
-        private const string ClassFullPath = "zbxlld.Windows.Supplement.PerfMon.Localization";
         private const string KeyPerflibCurlang = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\CurrentLanguage";
         private const string KeyPerflibDefault = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\009";
-        private static readonly Dictionary<string, string> counterList = CreateCounterDictionary(KeyPerflibDefault);
-        private static readonly Dictionary<string, string> translatedCounterList = CreateCounterDictionary(KeyPerflibCurlang);
+        private readonly Dictionary<string, string> _counterList;
+        private readonly Dictionary<string, string> _translatedCounterList;
 
-        private static Dictionary<string, string> CreateCounterDictionary(string keyName)
+        public Localization(ILogger<Localization> logger)
+        {
+            _counterList = CreateCounterDictionary(KeyPerflibDefault, logger);
+            _translatedCounterList = CreateCounterDictionary(KeyPerflibCurlang, logger);
+        }
+
+        private static Dictionary<string, string> CreateCounterDictionary(string keyName, ILogger<Localization> logger)
         {
             var regKey = Registry.LocalMachine.OpenSubKey(keyName);
             if (regKey is null) return new Dictionary<string, string>();
@@ -29,29 +35,25 @@ namespace zbxlld.Windows.Supplement.PerfMon
                     continue;
                 }
 
-                if (!result.TryAdd(strCounter[i], strCounter[i + 1]) && MainClass.DEBUG)
+                if (!result.TryAdd(strCounter[i], strCounter[i + 1]))
                 {
-                    MainClass.WriteLogEntry(string.Format("{0}..cctor: duplicated key. " +
-                                                          "Existing: \"{1}\" \"{2}\". New: \"{3}\" \"{4}\".", ClassFullPath,
-                        strCounter[i], result[strCounter[i]], strCounter[i], strCounter[i + 1]));
+                    logger.LogInformation(
+                        "The key {Key} already exists with the value {CurrentValue} but tried to write the value {OtherValue}",
+                        strCounter[i],
+                        result[strCounter[i]],
+                        strCounter[i + 1]);
                 }
-            }
-
-            if (MainClass.DEBUG)
-            {
-                MainClass.WriteLogEntry(string.Format("{0}..cctor: ending. " +
-                    "counterList.Count: {1}", ClassFullPath, result.Count));
             }
 
             return result;
         }
 
-		public static string GetName(string id) {
-			return counterList[id];
+		public string GetName(string id) {
+			return _counterList[id];
 		}
 
-		public static string GetNameForCurrentLanguage(string id) {
-			return translatedCounterList[id];
+		public string GetNameForCurrentLanguage(string id) {
+			return _translatedCounterList[id];
 		}
 	}
 }

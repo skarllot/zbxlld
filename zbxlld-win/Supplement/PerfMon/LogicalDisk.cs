@@ -22,24 +22,30 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using zbxlld.Windows.DriveDiscovery;
 
 namespace zbxlld.Windows.Supplement.PerfMon
 {
-	public static class LogicalDisk
+	public class LogicalDisk
 	{
 		private const string CounterLogicalDisk = "236";
 		private const string CounterFreeMb = "410";
 		private const long MbMult = 1048576;
 
 		// Relates Performance Monitor instance name to volume GUID.
-		private static Dictionary<Guid, string> perfMonGuid = CreateVolumeDictionary();
+		private readonly Dictionary<Guid, string> _perfMonGuid;
+
+		public LogicalDisk(Localization localization)
+		{
+			_perfMonGuid = CreateVolumeDictionary(localization);
+		}
 
 		// Try to discover GUID from buggy Performance Monitor instance names.
 		// Note: Discover drive GUID comparing free space is ugly, but MS gave me no choice.
-		private static Dictionary<Guid, string> CreateVolumeDictionary()
+		private static Dictionary<Guid, string> CreateVolumeDictionary(Localization localization)
 		{
 			// =====         WMI         =====
-			Win32Volume[] vols = Win32Volume.GetAllVolumes();
+			var vols = Win32Volume.GetAllVolumes();
 			// Free megabytes and volume GUID relation
 			var wmiFree = new Dictionary<ulong, Guid>(vols.Length);
 			// Volume name and volume GUID relation
@@ -59,7 +65,7 @@ namespace zbxlld.Windows.Supplement.PerfMon
 			var result = new Dictionary<Guid, string>(wmiFree.Count + wmiName.Count);
 
 			// ===== PERFORMANCE MONITOR ======
-			var perfCat = new PerformanceCounterCategory(Localization.GetName(CounterLogicalDisk));
+			var perfCat = new PerformanceCounterCategory(localization.GetName(CounterLogicalDisk));
 			// TODO: Find a faster way to get instance names.
 			string[] instances = perfCat.GetInstanceNames();
 			// Free megabytes and Performance Monitor instance name
@@ -73,8 +79,8 @@ namespace zbxlld.Windows.Supplement.PerfMon
 					result.Add(volId, item);
 				} else {
 					var p = new PerformanceCounter(
-						Localization.GetName(CounterLogicalDisk),
-						Localization.GetName(CounterFreeMb),
+						localization.GetName(CounterLogicalDisk),
+						localization.GetName(CounterFreeMb),
 						item);
 					perfFree.Add((ulong)p.RawValue, item);
 					p.Close();
@@ -91,9 +97,9 @@ namespace zbxlld.Windows.Supplement.PerfMon
 			return result;
 		}
 
-		public static string? GetInstanceName(Guid guid)
+		public string? GetInstanceName(Guid guid)
 		{
-			perfMonGuid.TryGetValue(guid, out string? ret);
+			_perfMonGuid.TryGetValue(guid, out string? ret);
 			return ret;
 		}
 	}

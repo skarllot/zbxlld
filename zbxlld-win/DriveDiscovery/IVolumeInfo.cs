@@ -22,7 +22,7 @@
 using System;
 using System.IO;
 
-namespace zbxlld.Windows.Supplement
+namespace zbxlld.Windows.DriveDiscovery
 {
 	public interface IVolumeInfo
 	{

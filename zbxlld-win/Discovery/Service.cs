@@ -1,93 +1,48 @@
-//
-//  Service.cs
-//
-//  Author:
-//       Fabricio Godoy <skarllot@gmail.com>
-//
-//  Copyright (c) 2013 Fabricio Godoy
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 using System.ServiceProcess;
-using System.Collections.Generic;
+using System.Text.Json;
 
 namespace zbxlld.Windows.Discovery
 {
-	public class Service : IArgHandler
-	{
-		private const string ARG_SERVICE = "service.discovery";
-		private const string ARG_SERVICE_ANY = "service.discovery.any";
-		private const string ARG_SERVICE_AUTO = "service.discovery.auto";
-		private const string ARG_SERVICE_DEMAND = "service.discovery.demand";
-		private const string ARG_SERVICE_DISABLED = "service.discovery.disabled";
+    public class Service
+    {
+        public void GetAny(Utf8JsonWriter writer, string? keySuffix)
+        {
+            Get(writer, keySuffix, (ServiceStartMode)(-1));
+        }
 
-		private static Service def = new Service();
+        public void GetAuto(Utf8JsonWriter writer, string? keySuffix)
+        {
+            Get(writer, keySuffix, ServiceStartMode.Automatic);
+        }
 
-		public static Service Default {
-			get {
-				return def;
-			}
-		}
+        public void GetManual(Utf8JsonWriter writer, string? keySuffix)
+        {
+            Get(writer, keySuffix, ServiceStartMode.Manual);
+        }
 
-		public Supplement.JsonOutput GetOutput(string arg)
-		{
-			Supplement.ServiceStartType filter;
-			switch (arg) {
-				case ARG_SERVICE:
-				case ARG_SERVICE_ANY:
-					filter = Supplement.ServiceStartType.Auto |
-						Supplement.ServiceStartType.Demand |
-						Supplement.ServiceStartType.Disabled;
-					break;
-				case ARG_SERVICE_AUTO:
-					filter = Supplement.ServiceStartType.Auto;
-					break;
-				case ARG_SERVICE_DEMAND:
-					filter = Supplement.ServiceStartType.Demand;
-					break;
-				case ARG_SERVICE_DISABLED:
-					filter = Supplement.ServiceStartType.Disabled;
-					break;
-				default:
-					return new Supplement.JsonOutput();
-			}
+        public void GetDisabled(Utf8JsonWriter writer, string? keySuffix)
+        {
+            Get(writer, keySuffix, ServiceStartMode.Disabled);
+        }
 
-			var jout = new Supplement.JsonOutput();
+        private void Get(Utf8JsonWriter writer, string? keySuffix, ServiceStartMode filter)
+        {
+            writer.WriteStartArray();
 
-			using var scm = new Supplement.SCManager();
-			foreach (var sc in ServiceController.GetServices()) {
-				var serviceInfo = scm.GetServiceInfo(sc.ServiceName);
-				if ((serviceInfo.StartType & filter) != serviceInfo.StartType)
-					continue;
+            foreach (var sc in ServiceController.GetServices())
+            {
+                if (filter > 0 && sc.StartType != filter)
+                    continue;
 
-				var item = new Dictionary<string, string>(4);
+                writer.WriteStartObject();
+                writer.WriteZabbixMacro("SVCNAME", keySuffix, sc.ServiceName);
+                writer.WriteZabbixMacro("SVCDESC", keySuffix, sc.DisplayName);
+                writer.WriteZabbixMacro("SVCSTATUS", keySuffix, sc.Status.ToString());
+                writer.WriteZabbixMacro("SVCSTARTTYPE", keySuffix, sc.StartType.ToString());
+                writer.WriteEndObject();
+            }
 
-				item.Add("SVCNAME", sc.ServiceName);
-				item.Add("SVCDESC", sc.DisplayName);
-				item.Add("SVCSTATUS", sc.Status.ToString());
-				item.Add("SVCSTARTTYPE", serviceInfo.StartType.ToString());
-				jout.Add(item);
-			}
-
-			return jout;
-		}
-
-		string[] IArgHandler.GetAllowedArgs()
-		{
-			return new string[] { ARG_SERVICE, ARG_SERVICE_ANY, ARG_SERVICE_AUTO,
-				ARG_SERVICE_DEMAND, ARG_SERVICE_DISABLED };
-		}
-	}
+            writer.WriteEndArray();
+        }
+    }
 }
-
