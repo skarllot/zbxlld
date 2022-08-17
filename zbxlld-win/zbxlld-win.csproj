@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <RootNamespace>zbxlld.Windows</RootNamespace>
+        <Product>ZBXLLD for Windows</Product>
         <Description>ZBXLLD provides additional discovery features to Zabbix agent.</Description>
         <Company>Fabricio Godoy</Company>
         <Copyright>2022 (c) Fabricio Godoy</Copyright>

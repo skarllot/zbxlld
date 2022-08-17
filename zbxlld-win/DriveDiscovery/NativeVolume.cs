@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
-using zbxlld.Windows.Supplement;
 
 namespace zbxlld.Windows.DriveDiscovery
 {

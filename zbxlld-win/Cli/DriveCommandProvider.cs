@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using zbxlld.Windows.DriveDiscovery;
 
-namespace zbxlld.Windows;
+namespace zbxlld.Windows.Cli;
 
 public class DriveCommandProvider : ICommandProvider
 {

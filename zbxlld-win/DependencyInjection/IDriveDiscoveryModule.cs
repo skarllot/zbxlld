@@ -1,4 +1,5 @@
 ﻿using Jab;
+using zbxlld.Windows.Cli;
 using zbxlld.Windows.DriveDiscovery;
 using zbxlld.Windows.Supplement.PerfMon;
 

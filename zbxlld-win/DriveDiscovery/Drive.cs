@@ -36,7 +36,7 @@ namespace zbxlld.Windows.DriveDiscovery
 
                 // TODO: Make a proper exit
                 Console.WriteLine("You have insufficient permissions or insufficient memory.");
-                Environment.Exit((int)ErrorId.GetAllVolumesOutOfMemory);
+                Environment.Exit(ErrorId.GetAllVolumesOutOfMemory);
                 return false;
             }
             catch (Exception e)

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using zbxlld.Windows.Discovery;
-using zbxlld.Windows.DriveDiscovery;
 
-namespace zbxlld.Windows;
+namespace zbxlld.Windows.Cli;
 
 public class NetworkCommandProvider : ICommandProvider
 {

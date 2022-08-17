@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace zbxlld.Windows;
+namespace zbxlld.Windows.Cli;
 
 public readonly struct CommandHandler
 {

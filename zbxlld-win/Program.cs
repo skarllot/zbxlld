@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using zbxlld.Windows;
+using zbxlld.Windows.Cli;
 using zbxlld.Windows.DependencyInjection;
 
 var container = new ZbxlldContainer(LogLevel.Information);
