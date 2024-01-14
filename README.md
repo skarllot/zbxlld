@@ -8,6 +8,9 @@ _ZBXLLD provides additional discovery features to Zabbix agent._
 
 <hr />
 
+## Documentation
+For deeper detail of available features, be sure also to check out [Documentation Page](https://fgodoy.me/zbxlld/).
+
 ## Installation
 
 - Compile or download from latest [release](https://github.com/skarllot/zbxlld/releases).
@@ -21,7 +24,7 @@ UserParameter=zbxlld[*],C:\Zabbix\bin\zbxlld-win.exe $1 $2 $3
 
 - Restart the Zabbix agent if is already started.
 
-- Read [our wiki](https://github.com/skarllot/zbxlld/wiki) for further instructions.
+- Read [documentation](https://fgodoy.me/zbxlld/) for further instructions.
 
 
 ## Contributing
