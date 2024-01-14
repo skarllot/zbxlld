@@ -55,4 +55,4 @@ jobs:
       run: dotnet build --no-restore
 
     - name: ✅ Test AOT
-      run: dotnet publish /p:CI=true /p:PublicRelease=true -r win-x64 -c Release
+      run: dotnet publish -r win-x64 -c Release
