@@ -2,23 +2,28 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <RootNamespace>zbxlld.Windows</RootNamespace>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <Product>ZBXLLD for Windows</Product>
         <Description>ZBXLLD provides additional discovery features to Zabbix agent.</Description>
         <Company>Fabricio Godoy</Company>
-        <Copyright>2022 (c) Fabricio Godoy</Copyright>
-        <VersionPrefix>1.0.0</VersionPrefix>
+        <Copyright>2024 (c) Fabricio Godoy</Copyright>
+        <VersionPrefix>1.1.0</VersionPrefix>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisMode>Recommended</AnalysisMode>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Jab" Version="0.8.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="6.0.0" />
-        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1" />
-        <PackageReference Include="System.Management" Version="6.0.0" />
-        <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
-        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.0.9" />
+        <PackageReference Include="Jab" Version="0.10.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="8.0.0" />
+        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
+        <PackageReference Include="System.Management" Version="8.0.0" />
+        <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.4.1" />
     </ItemGroup>
 
 </Project>
