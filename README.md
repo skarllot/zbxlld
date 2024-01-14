@@ -3,6 +3,7 @@
 _ZBXLLD provides additional discovery features to Zabbix agent._
 
 [![Build status](https://github.com/skarllot/zbxlld/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/skarllot/zbxlld/actions)
+[![GitHub Release](https://img.shields.io/github/v/release/skarllot/zbxlld)](https://github.com/skarllot/zbxlld/releases)
 [![GitHub license](https://img.shields.io/badge/license-GPL%203.0-blue.svg?style=flat)](https://raw.githubusercontent.com/skarllot/zbxlld/master/LICENSE)
 
 <hr />
