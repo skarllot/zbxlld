@@ -1,0 +1,65 @@
+﻿# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Publish Release
+
+on:
+  release:
+    types:
+      - created
+
+env:
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: 🛡️ Harden Runner
+        uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
+        with:
+          egress-policy: audit
+
+      - name: 🛒 Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
+        with:
+          dotnet-version: 8.0.x
+
+      - name: 🗃️ Setup NuGet cache
+        uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: 📥 Restore dependencies
+        run: dotnet restore --locked-mode
+
+      - name: 🏗️ Build
+        run: dotnet build --no-restore -c Release
+
+      - name: 📦 Pack
+        run: |
+          dotnet publish /p:CI=true /p:PublicRelease=true -r win-x64 -c Release
+          7z a -tzip -mx9 zbxlld-win-x64-${{ github.ref_name }}.zip $PWD/publish/*.*
+
+      - name: 🚀 Publish
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: "zbxlld*.zip"

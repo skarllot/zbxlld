@@ -5,6 +5,7 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <RootNamespace>zbxlld.Windows</RootNamespace>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <PublishDir>$(SolutionDir)publish</PublishDir>
         <Product>ZBXLLD for Windows</Product>
         <Description>ZBXLLD provides additional discovery features to Zabbix agent.</Description>
         <Company>Fabricio Godoy</Company>
@@ -15,6 +16,8 @@
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
         <AnalysisMode>Recommended</AnalysisMode>
+        <PublishAot>true</PublishAot>
+        <TrimMode>partial</TrimMode>
     </PropertyGroup>
 
     <ItemGroup>
