@@ -2,7 +2,7 @@
 
 _ZBXLLD provides additional discovery features to Zabbix agent._
 
-[![Build status](https://github.com/skarllot/zbxlld/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/skarllot/zbxlld/actions)
+[![Build status](https://github.com/skarllot/zbxlld/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/skarllot/zbxlld/actions)
 [![GitHub license](https://img.shields.io/badge/license-GPL%203.0-blue.svg?style=flat)](https://raw.githubusercontent.com/skarllot/zbxlld/master/LICENSE)
 
 <hr />
@@ -13,7 +13,7 @@ _ZBXLLD provides additional discovery features to Zabbix agent._
 
 - Copy "zbxlld-win.exe" to Zabbix agent directory (eg: C:\Zabbix\bin).
 
-- Add the following line to zabbix_agentd.conf:  
+- Add the following line to zabbix_agentd.conf:
 ```ini
 UserParameter=zbxlld[*],C:\Zabbix\bin\zbxlld-win.exe $1 $2 $3
 ```
