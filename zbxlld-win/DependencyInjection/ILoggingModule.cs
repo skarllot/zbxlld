@@ -19,6 +19,4 @@ public interface ILoggingModule
 [ServiceProviderModule]
 [Import(typeof(ILoggingModule))]
 [Singleton(typeof(ILoggerProvider), typeof(EventLogLoggerProvider))]
-public interface IEventLogLoggingModule
-{
-}
+public interface IEventLogLoggingModule;

@@ -1,5 +1,4 @@
 ﻿using Jab;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using zbxlld.Windows.Cli;
 
@@ -10,7 +9,6 @@ namespace zbxlld.Windows.DependencyInjection;
 [Import(typeof(IDriveDiscoveryModule))]
 [Import(typeof(INetworkDiscoveryModule))]
 [Import(typeof(IServiceDiscoveryModule))]
-[Transient(typeof(IServiceScopeFactory), Factory = nameof(CreateScopeFactory))]
 [Singleton(typeof(HelpCommand))]
 [Singleton(typeof(VersionCommand))]
 [Singleton(typeof(CommandApp))]
@@ -25,6 +23,4 @@ public sealed partial class ZbxlldContainer
     }
 
     private LogLevel GetLogLevel() => _logLevel;
-
-    private IServiceScopeFactory CreateScopeFactory() => this;
 }

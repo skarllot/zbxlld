@@ -1,32 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0-windows</TargetFramework>
-        <RootNamespace>zbxlld.Windows</RootNamespace>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <PublishDir>$(SolutionDir)publish</PublishDir>
-        <Product>ZBXLLD for Windows</Product>
-        <Description>ZBXLLD provides additional discovery features to Zabbix agent.</Description>
-        <Company>Fabricio Godoy</Company>
-        <Copyright>2024 (c) Fabricio Godoy</Copyright>
-        <VersionPrefix>1.1.0</VersionPrefix>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-        <EnableNETAnalyzers>true</EnableNETAnalyzers>
-        <AnalysisMode>Recommended</AnalysisMode>
-        <PublishAot>true</PublishAot>
-        <TrimMode>partial</TrimMode>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>zbxlld.Windows</RootNamespace>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <PublishDir>$(SolutionDir)publish</PublishDir>
+    <Product>ZBXLLD for Windows</Product>
+    <Description>ZBXLLD provides additional discovery features to Zabbix agent.</Description>
+    <Company>Fabricio Godoy</Company>
+    <Copyright>2024 (c) Fabricio Godoy</Copyright>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>Recommended</AnalysisMode>
+    <PublishAot>true</PublishAot>
+    <TrimMode>partial</TrimMode>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Jab" Version="0.10.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="8.0.0" />
-        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
-        <PackageReference Include="System.Management" Version="8.0.0" />
-        <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
-        <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.4.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Jab" Version="0.10.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="8.0.0" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.4.1" />
+  </ItemGroup>
 
 </Project>

@@ -7,6 +7,4 @@ namespace zbxlld.Windows.DependencyInjection;
 [ServiceProviderModule]
 [Singleton(typeof(ICommandProvider), typeof(ServiceCommandProvider))]
 [Singleton(typeof(Service))]
-public interface IServiceDiscoveryModule
-{
-}
+public interface IServiceDiscoveryModule;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using zbxlld.Windows.Discovery;
+﻿using zbxlld.Windows.Discovery;
 
 namespace zbxlld.Windows.Cli;
 

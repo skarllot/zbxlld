@@ -11,6 +11,4 @@ namespace zbxlld.Windows.DependencyInjection;
 [Singleton(typeof(NativeVolumeFactory))]
 [Singleton(typeof(LogicalDisk))]
 [Singleton(typeof(Localization))]
-public interface IDriveDiscoveryModule
-{
-}
+public interface IDriveDiscoveryModule;

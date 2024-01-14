@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace zbxlld.Windows.Cli;
+﻿namespace zbxlld.Windows.Cli;
 
 public interface ICommandProvider
 {

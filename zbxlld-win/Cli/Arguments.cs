@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace zbxlld.Windows.Cli;
+﻿namespace zbxlld.Windows.Cli;
 
 public readonly struct Arguments
 {
@@ -40,7 +38,7 @@ public readonly struct Arguments
         }
 
         var nextIsKeySuffix = false;
-        foreach (string item in args[1..])
+        foreach (var item in args[1..])
         {
             if (nextIsKeySuffix)
             {

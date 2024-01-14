@@ -1,23 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Globalization;
 using System.Text;
 
 namespace zbxlld.Windows.Cli;
 
 public class HelpCommand
 {
-    private const string UsageTemplate = @$"{ThisAssembly.Info.Product}.
+    private const string UsageTemplate =
+        $$"""
+          {{ThisAssembly.Info.Product}}.
 
-Usage:
-{{Items}}
-  {ThisAssembly.Info.Title} -h | --help
-  {ThisAssembly.Info.Title} --version
+          Usage:
+          {Items}
+            {{ThisAssembly.Info.Title}} -h | --help
+            {{ThisAssembly.Info.Title}} --version
 
-Options:
-  -h --help Show this screen.
-  --version Show version.
-  --pretty  Show indented JSON output.";
+          Options:
+            -h --help Show this screen.
+            --version Show version.
+            --pretty  Show indented JSON output.
+          """;
 
     private readonly string _usage;
 
@@ -30,7 +31,9 @@ Options:
             if (!isFirst)
                 providerItems.AppendLine();
 
-            providerItems.AppendFormat("  {0} {1} [-s <key-suffix>]", ThisAssembly.Info.Title, handler.Key);
+            providerItems.Append(
+                CultureInfo.InvariantCulture,
+                $"  {ThisAssembly.Info.Title} {handler.Key} [-s <key-suffix>]");
             isFirst = false;
         }
 

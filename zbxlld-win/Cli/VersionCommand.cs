@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace zbxlld.Windows.Cli;
+﻿namespace zbxlld.Windows.Cli;
 
 public class VersionCommand
 {

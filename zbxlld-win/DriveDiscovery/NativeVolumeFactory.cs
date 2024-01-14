@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace zbxlld.Windows.DriveDiscovery;
 
@@ -18,7 +17,7 @@ public class NativeVolumeFactory
         var ret = new NativeVolume[di.Length];
         var logger = _loggerFactory.CreateLogger<NativeVolume>();
 
-        for (int i = 0; i < di.Length; i++)
+        for (var i = 0; i < di.Length; i++)
         {
             ret[i] = new NativeVolume(logger, di[i]);
         }

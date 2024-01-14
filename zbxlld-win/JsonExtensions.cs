@@ -10,7 +10,7 @@ internal static class JsonExtensions
         string? keySuffix,
         string? value)
     {
-        string key = string.IsNullOrWhiteSpace(keySuffix)
+        var key = string.IsNullOrWhiteSpace(keySuffix)
             ? $"{{#{propertyName}}}"
             : $"{{#{propertyName}{keySuffix}}}";
 

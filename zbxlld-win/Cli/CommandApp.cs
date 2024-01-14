@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
 namespace zbxlld.Windows.Cli;
 
-public class CommandApp
+public partial class CommandApp
 {
     private readonly ILogger<CommandApp> _logger;
     private readonly HelpCommand _helpCommand;
@@ -56,11 +53,11 @@ public class CommandApp
 
         if (!_commands.TryGetValue(arguments.Key, out var handler))
         {
-            _logger.LogError("Invalid argument: {ArgValue}", arguments.Key);
+            LogInvalidArg(arguments.Key);
 
             Console.WriteLine("Invalid argument");
             Console.WriteLine("Available keys are:");
-            foreach (string item in _commands.Keys)
+            foreach (var item in _commands.Keys)
                 Console.WriteLine(" {0}", item);
 
             return ErrorId.ParameterInvalid;
@@ -77,4 +74,7 @@ public class CommandApp
 
         return ErrorId.NoError;
     }
+
+    [LoggerMessage(LogLevel.Error, "Invalid argument: {ArgValue}")]
+    private partial void LogInvalidArg(string argValue);
 }

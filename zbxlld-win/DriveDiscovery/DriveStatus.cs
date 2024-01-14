@@ -1,13 +1,10 @@
-namespace zbxlld.Windows.DriveDiscovery
+namespace zbxlld.Windows.DriveDiscovery;
+
+public enum DriveStatus : ushort
 {
-	public enum DriveStatus : ushort
-	{
-		Other = 1,
-		Unknown = 2,
-		Enabled = 3,
-		Disabled = 4,
-		NotApplicable = 5
-	}
-
+    Other = 1,
+    Unknown = 2,
+    Enabled = 3,
+    Disabled = 4,
+    NotApplicable = 5
 }
-

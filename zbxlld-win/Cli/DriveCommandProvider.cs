@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using zbxlld.Windows.DriveDiscovery;
+﻿using zbxlld.Windows.DriveDiscovery;
 
 namespace zbxlld.Windows.Cli;
 
