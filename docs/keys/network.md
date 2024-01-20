@@ -1,6 +1,6 @@
 ﻿# Network
 
-Returns a list of network interfaces in JSON format. Returns all but Loopback and Tunnel interfaces.
+The key `network.discovery` returns a list of network interfaces in JSON format. Returns all but Loopback and Tunnel interfaces.
 
 ## Filters
 

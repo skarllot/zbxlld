@@ -1,5 +1,17 @@
 ﻿# History
 
+## v1.0.1 - 2024-01-14 [⬇️](https://github.com/skarllot/zbxlld/releases/download/v1.0.1/zbxlld-win-x64-v1.0.1.zip)
+### 🔧 Maintenance
+- Migrate to .NET 8.0 by [@skarllot](https://github.com/skarllot)
+- Native compilation using AOT by [@skarllot](https://github.com/skarllot)
+
+### 📖 Docs updates
+- Improve README by [@skarllot](https://github.com/skarllot)
+- Create documentation page using VitePress by [@skarllot](https://github.com/skarllot)
+
+### 📦 Dependency Updates
+- build(deps): update dependency dotnet-sdk to v8.0.101 by [@renovate](https://github.com/renovate) in [#4](https://github.com/skarllot/zbxlld/pull/4)
+
 ## v0.7 - 2014-04-02 [⬇️](https://github.com/skarllot/zbxlld/releases/download/v0.7/zbxlld-win.exe)
 - Improved debugging and error handling.
 - Added helper message to show when a invalid key is requested.
