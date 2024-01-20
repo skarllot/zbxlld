@@ -1,6 +1,6 @@
 ﻿# Service
 
-Returns a list of machine services in JSON format.
+The key `service.discovery` returns a list of machine services in JSON format.
 
 ## Filters
 

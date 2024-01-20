@@ -1,6 +1,6 @@
 ﻿# Drive
 
-Returns a list of machine drives in JSON format.
+The key `drive.discovery` returns a list of machine drives in JSON format.
 
 ## Filters
 
@@ -65,7 +65,7 @@ _Since 0.3_
 
 Filesystem display name.
 
-_Spected values:_ System (C:), SWAP (D:) etc.
+_Expected values:_ System (C:), SWAP (D:) etc.
 
 _Since 0.4_
 
@@ -73,29 +73,29 @@ _Since 0.4_
 
 Filesystem format.
 
-_Spected values:_ NTFS, FAT32 etc.
+_Expected values:_ NTFS, FAT32 etc.
 
 ### \{#FSLABEL}
 
 Filesystem label.
 
-_Spected values:_ System, SWAP etc.
+_Expected values:_ System, SWAP etc.
 
 ### \{#FSNAME}
 
 Assigned letter.
 
-_Spected values:_ C:\, D:\, C:\Boot\ etc.
+_Expected values:_ C:\, D:\, C:\Boot\ etc.
 
 ### \{#FSPERFMON}
 
 Drive instance name from Performance Monitor.
 
-_Spected values:_ C:, D:, C:\Boot, HarddiskVolume5 etc.
+_Expected values:_ C:, D:, C:\Boot, HarddiskVolume5 etc.
 
 _Since 0.5_
 
-## Output Example
+## Output Examples
 
 **drive.discovery.fixed**
 
