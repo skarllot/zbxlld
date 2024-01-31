@@ -68,9 +68,9 @@
       },
       "ThisAssembly.AssemblyInfo": {
         "type": "Direct",
-        "requested": "[1.4.1, )",
-        "resolved": "1.4.1",
-        "contentHash": "fjqgcAk9NmFTTl08oMJr2jjfJCSzH/4FpZ11bMz5+VtvOcAt8wra658NhcGsvdshCPJi9LCLVMc1fc/pFrwhlw==",
+        "requested": "[1.4.3, )",
+        "resolved": "1.4.3",
+        "contentHash": "WbfymV0/HNJuYtmhk0OH3c4k+l07lyB3DE5e82EapAJb9NrOeFywu3xttGhc8AchT8Bm+yQVfGsB4emKnf7Hjw==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "System.Threading.Tasks.Extensions": "4.5.4"
