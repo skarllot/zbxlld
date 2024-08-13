@@ -10,9 +10,9 @@
       },
       "Microsoft.DotNet.ILCompiler": {
         "type": "Direct",
-        "requested": "[8.0.2, )",
-        "resolved": "8.0.2",
-        "contentHash": "rGE3+673xn1iZJCoMIuUb9lhqje4DiCB+qTyPAJ97Bw15c4N69ZbMAO/GJyxchaoLJCHIPXP52hwxEzqrllwCg=="
+        "requested": "[8.0.7, )",
+        "resolved": "8.0.7",
+        "contentHash": "5Vkl5384rfKZmK7rVm8pjuMk2Cweaqd+rPwL86bddhInHdBg3ClO9H0cqwd7kXf+F8/aXuZxKAnl6izzaWkfUw=="
       },
       "Microsoft.Extensions.Logging.EventLog": {
         "type": "Direct",
@@ -29,15 +29,15 @@
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.2, )",
-        "resolved": "8.0.2",
-        "contentHash": "hKTrehpfVzOhAz0mreaTAZgbz0DrMEbWq4n3hAo8Ks6WdxdqQhNPvzOqn9VygKuWf1bmxPdraqzTaXriO/sn0A=="
+        "requested": "[8.0.7, )",
+        "resolved": "8.0.7",
+        "contentHash": "iI52ptEKby2ymQ6B7h4TWbFmm85T4VvLgc/HvS45Yr3lgi4IIFbQtjON3bQbX/Vc94jXNSLvrDOp5Kh7SJyFYQ=="
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
-        "requested": "[3.6.133, )",
-        "resolved": "3.6.133",
-        "contentHash": "VZWMd5YAeDxpjWjAP/X6bAxnRMiEf6tES/ITN0X5CHJgkWLLeHGmEALivmTAfYM6P+P/3Szy6VCITUAkqjcHVw=="
+        "requested": "[3.6.141, )",
+        "resolved": "3.6.141",
+        "contentHash": "A2+obbz6Xl6nHdDDMiqHCrn6Lktrs/pLq4BIQXDUD2O2gd5fz2WobQyX30Kp0mPPXjEOgBA1r5s6iYVurTkUig=="
       },
       "System.Diagnostics.PerformanceCounter": {
         "type": "Direct",
