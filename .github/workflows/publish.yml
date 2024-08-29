@@ -12,6 +12,7 @@ env:
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 permissions:
   contents: write
@@ -28,7 +29,14 @@ jobs:
       - name: 🛡️ Harden Runner
         uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
         with:
-          egress-policy: audit
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            aka.ms:443
+            api.nuget.org:443
+            dotnetcli.azureedge.net:443
+            github.com:443
+            www.nuget.org:443
 
       - name: 🛒 Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1

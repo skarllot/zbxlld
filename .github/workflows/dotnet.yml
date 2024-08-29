@@ -13,6 +13,7 @@ env:
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 permissions:
   contents: read
@@ -29,7 +30,20 @@ jobs:
     - name: 🛡️ Harden Runner
       uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
       with:
-        egress-policy: audit
+        disable-sudo: true
+        egress-policy: block
+        allowed-endpoints: >
+          aka.ms:443
+          api.codecov.io:443
+          api.nuget.org:443
+          auth.docker.io:443
+          cli.codecov.io:443
+          dotnetcli.azureedge.net:443
+          github.com:443
+          objects.githubusercontent.com:443
+          production.cloudflare.docker.com:443
+          registry-1.docker.io:443
+          storage.googleapis.com:443
 
     - name: 🛒 Checkout
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -39,7 +53,7 @@ jobs:
     - name: 🧰 Setup .NET
       uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
       with:
-        dotnet-version: 8.0.x
+        global-json-file: global.json
 
     - name: 🗃️ Setup NuGet cache
       uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
