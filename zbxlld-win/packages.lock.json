@@ -10,9 +10,9 @@
       },
       "Microsoft.DotNet.ILCompiler": {
         "type": "Direct",
-        "requested": "[8.0.7, )",
-        "resolved": "8.0.7",
-        "contentHash": "5Vkl5384rfKZmK7rVm8pjuMk2Cweaqd+rPwL86bddhInHdBg3ClO9H0cqwd7kXf+F8/aXuZxKAnl6izzaWkfUw=="
+        "requested": "[8.0.8, )",
+        "resolved": "8.0.8",
+        "contentHash": "OWFDT/S4Zl5QVakCjVfRaZTLrmWDhA20ud/BKkru7vWnIrejMcUk4Xz2MwavgyzBypryoHYta787k4avhxsU9A=="
       },
       "Microsoft.Extensions.Logging.EventLog": {
         "type": "Direct",
@@ -29,9 +29,9 @@
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.7, )",
-        "resolved": "8.0.7",
-        "contentHash": "iI52ptEKby2ymQ6B7h4TWbFmm85T4VvLgc/HvS45Yr3lgi4IIFbQtjON3bQbX/Vc94jXNSLvrDOp5Kh7SJyFYQ=="
+        "requested": "[8.0.8, )",
+        "resolved": "8.0.8",
+        "contentHash": "P8wR6MUWwYXIjPJuBaZgo5zlI/GWI6QEAo6NyVIbPefa9CCkohYu7dP2rD/mrqnjEqfRHyl+h9VZrDoGpELqYg=="
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
@@ -68,9 +68,9 @@
       },
       "ThisAssembly.AssemblyInfo": {
         "type": "Direct",
-        "requested": "[1.4.3, )",
-        "resolved": "1.4.3",
-        "contentHash": "WbfymV0/HNJuYtmhk0OH3c4k+l07lyB3DE5e82EapAJb9NrOeFywu3xttGhc8AchT8Bm+yQVfGsB4emKnf7Hjw==",
+        "requested": "[1.5.0, )",
+        "resolved": "1.5.0",
+        "contentHash": "JN+WUe35pSTOhtjTCE9ccr+jkCB+ltDu2k1H3iUxjmxHnd71rG6RMzJmi8oap+fdCePAh58TLobTZ+sYG5+XpQ==",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "System.Threading.Tasks.Extensions": "4.5.4"
