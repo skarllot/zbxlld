@@ -67,7 +67,7 @@ jobs:
           7z a -tzip -mx9 zbxlld-win-x64-${{ github.ref_name }}.zip $PWD/publish/*.*
 
       - name: 🚀 Publish
-        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: "zbxlld*.zip"
