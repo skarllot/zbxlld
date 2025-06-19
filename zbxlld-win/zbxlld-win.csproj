@@ -31,7 +31,7 @@
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.1" />
     <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
-    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.5.0" />
+    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="2.0.14" />
   </ItemGroup>
 
 </Project>
