@@ -4,9 +4,9 @@
     "net8.0-windows7.0": {
       "Jab": {
         "type": "Direct",
-        "requested": "[0.11.0, )",
-        "resolved": "0.11.0",
-        "contentHash": "m/1BRbBb07M3pAuqmH9e7K/vrny9XqUkmYDNPd7r8ilRdKspXy41tS0/mfXwruxQO8RNTqE1gCGj9h+4JgJEAA=="
+        "requested": "[0.12.0, )",
+        "resolved": "0.12.0",
+        "contentHash": "neRxZ9hZ7W/af2mDWboHmuPfauIuhicNcsJWaBro9MgvyMH3z13oLcWcDUkgCxsoqH3bQxO+XO8iBHY2H75vbQ=="
       },
       "Microsoft.DotNet.ILCompiler": {
         "type": "Direct",
